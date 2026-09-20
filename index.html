@@ -52,18 +52,20 @@ body{font-family:Tahoma,sans-serif;background:#1b5e20;padding:10px;padding-top:c
 .gameover b{color:#ffcc80;font-size:22px}
 .footer{text-align:center;color:#fff;font-size:13px;font-weight:bold;background:rgba(0,0,0,.35);padding:8px 20px;border-radius:15px;width:100%;max-width:720px}
 </style>
-</head>
-<body>
+</head><body>
+
 <div class="header">
 <div class="stat"><b>🪙 کوین</b><span id="coinCount">0</span></div>
 <div class="stat"><b>⏱ زمان</b><span id="timeCount">30</span></div>
 <div class="stat"><b>🐦 دفع‌شده</b><span id="birdCount">0</span></div>
 </div>
+
 <div class="field" id="field">
 <div class="sky"><div class="sun"></div></div>
 <div class="hills"></div>
 <div class="fence" id="fence"></div>
 <div class="farm"></div>
+
 <div class="scarecrow inactive" id="scarecrow">
 <svg viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg">
 <rect x="22" y="125" width="156" height="11" fill="#8d6e63" rx="4"/>
@@ -86,10 +88,12 @@ body{font-family:Tahoma,sans-serif;background:#1b5e20;padding:10px;padding-top:c
 <path d="M84 116Q100 124 116 116" stroke="#3e2723" stroke-width="2.2" fill="none" stroke-dasharray="3,3" stroke-linecap="round"/>
 </svg>
 </div>
+
 <div class="corner">
 <button id="soundBtn">🔊</button>
 <button id="stopBtn">⏹ پایان</button>
 </div>
+
 <div class="overlay" id="startOverlay">
 <div class="otitle">🌾 برنج یار 🌾</div>
 <div class="osub">مترسک رو تکون بده تا پرنده‌ها بپرن!</div>
