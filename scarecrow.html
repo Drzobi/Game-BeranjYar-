@@ -56,13 +56,11 @@
     background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 2px, transparent 2px 12px);
   }
 
-  /* ---------- مترسک SVG ---------- */
   .scarecrow-wrap{
     position:absolute; left:50%; bottom:11%;
     transform: translateX(-50%);
     width:150px; height:210px;
-    cursor:pointer;
-    z-index:5;
+    cursor:pointer; z-index:5;
     filter: drop-shadow(0 14px 18px rgba(0,0,0,.25));
     touch-action: manipulation;
   }
@@ -75,9 +73,7 @@
     0%,100%{ transform: rotate(-2deg); }
     50%{ transform: rotate(2deg); }
   }
-  .scarecrow-wrap.shaking svg{
-    animation: shake 0.45s ease-in-out;
-  }
+  .scarecrow-wrap.shaking svg{ animation: shake 0.45s ease-in-out; }
   @keyframes shake{
     0%{ transform: rotate(0deg); }
     15%{ transform: rotate(-20deg); }
@@ -86,11 +82,8 @@
     75%{ transform: rotate(10deg); }
     100%{ transform: rotate(0deg); }
   }
-  .scarecrow-wrap:active svg{
-    transform: scale(0.94);
-  }
+  .scarecrow-wrap:active svg{ transform: scale(0.94); }
 
-  /* ---------- پرنده‌ها ---------- */
   .bird{
     position:absolute; font-size:38px; line-height:1;
     background:none; border:0; padding:0; outline:none;
@@ -99,19 +92,12 @@
     will-change: left, top, transform;
     transition: opacity 0.3s;
   }
-  .bird.flying{
-    pointer-events:auto; cursor:pointer;
-  }
-  .bird.perched{
-    animation: perch-wobble 0.7s ease-in-out infinite;
-  }
+  .bird.perched{ animation: perch-wobble 0.7s ease-in-out infinite; }
   @keyframes perch-wobble{
     0%,100%{ transform: rotate(-10deg) scale(1); }
     50%{ transform: rotate(10deg) scale(1.05); }
   }
-  .bird.scared{
-    animation: scared-fly 0.55s ease-out forwards;
-  }
+  .bird.scared{ animation: scared-fly 0.55s ease-out forwards; }
   @keyframes scared-fly{
     0%{ transform: scale(1) rotate(0); opacity:1; }
     40%{ transform: scale(1.5) rotate(35deg); opacity:1; }
@@ -176,41 +162,28 @@
 
     <div class="scarecrow-wrap" id="scarecrow" aria-label="مترسک">
       <svg viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg">
-        <!-- چوب افقی برای شونه‌ها -->
         <rect x="22" y="125" width="156" height="11" fill="#8d6e63" rx="4"/>
-        <!-- چوب عمودی -->
         <rect x="94" y="80" width="12" height="180" fill="#8d6e63" rx="3"/>
-        <!-- کاه‌های دست چپ -->
         <path d="M 26 122 L 10 106 M 26 131 L 6 142 M 26 127 L 2 127"
               stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
-        <!-- کاه‌های دست راست -->
         <path d="M 174 122 L 190 106 M 174 131 L 194 142 M 174 127 L 198 127"
               stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
-        <!-- تنه (پیراهن) -->
         <path d="M 60 130 Q 52 212 66 226 L 134 226 Q 148 212 140 130 Z"
               fill="#ef6c00" stroke="#bf360c" stroke-width="2"/>
-        <!-- وصله‌ها -->
         <rect x="76" y="162" width="22" height="22" fill="#8d6e63" transform="rotate(8 87 173)"/>
         <rect x="105" y="188" width="18" height="18" fill="#5d4037" transform="rotate(-6 114 197)"/>
-        <!-- کاه‌های پایین -->
         <path d="M 66 226 L 56 250 M 79 226 L 73 254 M 91 226 L 87 256 M 103 226 L 99 256 M 115 226 L 119 254 M 128 226 L 138 250"
               stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
-        <!-- سر -->
         <circle cx="100" cy="98" r="33" fill="#ffe0b2" stroke="#8d6e63" stroke-width="2"/>
-        <!-- لبه کلاه -->
         <ellipse cx="100" cy="70" rx="50" ry="11" fill="#8d6e63"/>
         <ellipse cx="100" cy="70" rx="50" ry="11" fill="none" stroke="#5d4037" stroke-width="1.5"/>
-        <!-- کلاه -->
         <path d="M 72 70 L 78 30 Q 100 20 122 30 L 128 70 Z" fill="#795548"/>
         <rect x="72" y="64" width="56" height="10" fill="#d84315"/>
-        <!-- چشم‌ها -->
         <circle cx="88" cy="94" r="4.5" fill="#3e2723"/>
         <circle cx="112" cy="94" r="4.5" fill="#3e2723"/>
         <circle cx="89" cy="93" r="1.3" fill="#fff"/>
         <circle cx="113" cy="93" r="1.3" fill="#fff"/>
-        <!-- بینی -->
         <polygon points="100,102 95,111 105,111" fill="#e65100"/>
-        <!-- دهان (دوخت) -->
         <path d="M 84 116 Q 100 124 116 116" stroke="#3e2723" stroke-width="2.2"
               fill="none" stroke-dasharray="3,3" stroke-linecap="round"/>
       </svg>
@@ -254,10 +227,132 @@
   let saveTimer = null;
   const activeBirds = new Set();
 
+  /* ---------------- Audio Engine ---------------- */
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { return null; }
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  // صدای جیک‌جیک کوتاه پرنده عادی (زمانی که روی شاخه می‌شینه)
+  function playBirdPerchSound() {
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+    for (let i = 0; i < 2; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1500, now + i*0.09);
+      osc.frequency.exponentialRampToValueAtTime(2200, now + i*0.09 + 0.05);
+      gain.gain.setValueAtTime(0.09, now + i*0.09);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.09 + 0.07);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i*0.09);
+      osc.stop(now + i*0.09 + 0.09);
+    }
+  }
+
+  // صدای ترسیدن پرنده (جیک بلند + بال زدن)
+  function playBirdScaredSound() {
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // جیک بلند
+    for (let i = 0; i < 3; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1600 + i*200, now + i*0.06);
+      osc.frequency.exponentialRampToValueAtTime(2800 + i*300, now + i*0.06 + 0.05);
+      gain.gain.setValueAtTime(0.16, now + i*0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.06 + 0.07);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i*0.06);
+      osc.stop(now + i*0.06 + 0.09);
+    }
+
+    // بال زدن (نویز سفید کوتاه)
+    const bufferSize = ctx.sampleRate * 0.25;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.5);
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.12, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 1200;
+    noise.connect(filter).connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.3);
+  }
+
+  // صدای تکون دادن مترسک (خش‌خش چوبی + جیرجیر)
+  function playShakeSound() {
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // خش‌خش چوبی (نویز فیلتردار)
+    const bufferSize = ctx.sampleRate * 0.4;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 1.2);
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 800;
+    noiseFilter.Q.value = 0.8;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.18, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    noise.connect(noiseFilter).connect(noiseGain).connect(ctx.destination);
+    noise.start(now); noise.stop(now + 0.45);
+
+    // جیرجیر چوبی
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+    gain.gain.setValueAtTime(0.14, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.42);
+  }
+
+  // صدای امتیاز گرفتن
+  function playScoreSound() {
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+    const notes = [660, 880, 1100];
+    notes.forEach(function (freq, i) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.12, now + i*0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.06 + 0.15);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i*0.06);
+      osc.stop(now + i*0.06 + 0.18);
+    });
+  }
+
+  /* ---------------- ذخیره‌سازی ---------------- */
   function loadTotal() {
-    try {
-      totalCoins = Math.max(0, parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10) || 0);
-    } catch (e) { totalCoins = 0; }
+    try { totalCoins = Math.max(0, parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10) || 0); }
+    catch (e) { totalCoins = 0; }
   }
   function saveTotal() {
     if (saveTimer) return;
@@ -286,7 +381,7 @@
     setTimeout(function () { f.remove(); }, 900);
   }
 
-  /* ---------- تکان دادن مترسک ---------- */
+  /* ---------------- تکان مترسک ---------------- */
   let shakeTimeout = null;
   function shakeScarecrow() {
     if (!playing) return;
@@ -299,7 +394,10 @@
       scarecrow.classList.remove('shaking');
     }, 500);
 
-    // محدوده تکان: اطراف مترسک
+    // صدای تکون
+    playShakeSound();
+
+    // محدوده تکان
     const fieldRect = field.getBoundingClientRect();
     const scRect = scarecrow.getBoundingClientRect();
     const scCX = scRect.left + scRect.width / 2 - fieldRect.left;
@@ -332,6 +430,9 @@
     b.el.classList.add('scared');
     updateHUD();
 
+    playBirdScaredSound();
+    playScoreSound();
+
     setTimeout(function () {
       b.el.remove();
       activeBirds.delete(b);
@@ -343,16 +444,17 @@
   scarecrow.addEventListener('pointerdown', function (ev) {
     if (ev.isPrimary === false) return;
     ev.preventDefault();
+    if (!audioCtx) getAudioCtx();  // فعال‌سازی صدا با اولین لمس
     shakeScarecrow();
   });
 
-  /* ---------- ساخت پرنده ---------- */
+  /* ---------------- ساخت پرنده ---------------- */
   const BIRD_EMOJI = ['🐦', '🐦‍⬛', '🦅', '🕊️'];
 
   function spawnBird() {
     if (!playing) return;
     const el = document.createElement('div');
-    el.className = 'bird flying';
+    el.className = 'bird';
     el.textContent = BIRD_EMOJI[Math.floor(Math.random() * BIRD_EMOJI.length)];
 
     const fieldRect = field.getBoundingClientRect();
@@ -390,12 +492,9 @@
       el.style.transform = 'rotate(' + (ang * 0.12) + 'deg)';
 
       if (p >= 1) {
-        // نشست روی مترسک
-        el.classList.remove('flying');
         el.classList.add('perched');
         el.style.transform = '';
-        el.style.pointerEvents = 'auto';
-        // بعد از ۴ ثانیه خودش می‌پره (بدون امتیاز)
+        playBirdPerchSound();
         setTimeout(function () {
           if (b.scared) return;
           b.scared = true;
@@ -411,6 +510,7 @@
   }
 
   function startGame() {
+    if (!audioCtx) getAudioCtx();
     activeBirds.forEach(function (b) { b.el.remove(); });
     activeBirds.clear();
     field.querySelectorAll('.bird').forEach(function (b) { b.remove(); });
@@ -421,71 +521,4 @@
     updateHUD();
 
     startBtn.textContent = 'در حال بازی...';
-    startBtn.disabled = true;
-
-    timer = setInterval(function () {
-      timeLeft -= 1;
-      updateHUD();
-      if (timeLeft <= 0) endGame();
-    }, 1000);
-
-    let spawnDelay = 1700;
-    function scheduleSpawn() {
-      if (!playing) return;
-      spawnBird();
-      if (Math.random() < 0.35) spawnBird();
-      spawnDelay = Math.max(650, spawnDelay - 70);
-      spawner = setTimeout(scheduleSpawn, spawnDelay);
-    }
-    spawner = setTimeout(scheduleSpawn, 500);
-  }
-
-  function endGame() {
-    playing = false;
-    clearInterval(timer);
-    clearTimeout(spawner);
-
-    activeBirds.forEach(function (b) {
-      if (!b.scared) {
-        b.scared = true;
-        b.el.style.transition = 'opacity .3s';
-        b.el.style.opacity = '0';
-      }
-    });
-    setTimeout(function () {
-      activeBirds.forEach(function (b) { b.el.remove(); });
-      activeBirds.clear();
-    }, 400);
-
-    totalCoins += coins;
-    saveTotal();
-
-    finalScore.textContent = coins;
-    finalBirds.textContent = birdsDefeated;
-    gameover.classList.add('show');
-
-    startBtn.textContent = 'شروع بازی';
-    startBtn.disabled = false;
-  }
-
-  startBtn.addEventListener('click', startGame);
-  againBtn.addEventListener('click', startGame);
-
-  sendBtn.addEventListener('click', function () {
-    const payload = {
-      type: 'scarecrow_game',
-      roundCoins: coins,
-      totalCoins: totalCoins,
-      birdsDefeated: birdsDefeated,
-      ts: Date.now()
-    };
-    if (tg && typeof tg.sendData === 'function') {
-      try { tg.sendData(JSON.stringify(payload)); return; } catch (e) {}
-    }
-    alert('ارسال ممکن نشد. این دکمه فقط در مینی‌اپ تلگرام کار می‌کند.');
-  });
-
-})();
-</script>
-</body>
-</html>
+    startB
