@@ -509,12 +509,4 @@
 
   function playScoreSound() {
     if (!soundEnabled) return;
-    const ctx = getAudioCtx(); if (!ctx) return;
-    const now = ctx.currentTime;
-    [660, 880, 1100].forEach(function (freq, i) {
-      const osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.10, now + i*0.06);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.06 + 0.15);
-      osc.c
+    const ctx = getAudioCtx(
