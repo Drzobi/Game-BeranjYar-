@@ -3,283 +3,392 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>بازی‌های برنج یار</title>
+<title>بازی مترسک برنج یار</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ height:100%; }
   body{
     font-family:Tahoma, system-ui, sans-serif;
-    background: linear-gradient(160deg,#fff9c4 0%,#ffe082 35%,#a5d6a7 75%,#66bb6a 100%);
-    background-size: 200% 200%;
-    animation: bgShift 12s ease-in-out infinite;
-    min-height:100vh; min-height:100dvh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:20px;
-    padding-top:calc(20px + env(safe-area-inset-top));
-    padding-bottom:calc(20px + env(safe-area-inset-bottom));
-    user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent;
-    overflow:hidden;
-    position:relative;
-  }
-  @keyframes bgShift{
-    0%,100%{ background-position: 0% 50%; }
-    50%{ background-position: 100% 50%; }
-  }
-
-  /* ذرات شناور */
-  .particles{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-  .particle{
-    position:absolute; font-size:28px; opacity:0;
-    animation: floatUpBg linear infinite;
-    will-change: transform;
-  }
-  @keyframes floatUpBg{
-    0%{ transform: translateY(105vh) rotate(0deg); opacity:0; }
-    10%{ opacity:0.6; }
-    90%{ opacity:0.6; }
-    100%{ transform: translateY(-15vh) rotate(360deg); opacity:0; }
-  }
-
-  .content{
-    position:relative; z-index:2;
-    width:100%; max-width:400px;
+    background:#1b5e20;
+    padding:10px;
+    padding-top:calc(10px + env(safe-area-inset-top));
+    padding-bottom:calc(10px + env(safe-area-inset-bottom));
     display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; min-height:100dvh;
+    user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent;
+    overscroll-behavior:none;
   }
 
-  /* عنوان */
-  .title{
-    font-size:30px; font-weight:bold; color:#1b5e20;
-    margin-bottom:6px; text-align:center;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    text-shadow: 2px 2px 0 rgba(255,255,255,0.7);
-    animation: titleGlow 2.5s ease-in-out infinite;
-    line-height:1.3;
+  /* ============ هدر ============ */
+  .header{
+    background:rgba(255,255,255,.95); padding:8px 14px; border-radius:14px;
+    box-shadow:0 6px 15px rgba(0,0,0,.2); text-align:center;
+    width:100%; max-width:720px; border:2px solid #ffb74d;
+    z-index:100;
   }
-  @keyframes titleGlow{
-    0%,100%{ transform:scale(1); filter:drop-shadow(0 0 0px #ffd54f); }
-    50%{ transform:scale(1.04); filter:drop-shadow(0 0 14px #ffd54f); }
-  }
-  .subtitle{
-    color:#4a7a4a; font-size:13px; margin-bottom:24px; text-align:center;
-    animation: fadeInDown 0.8s ease both;
-  }
-  @keyframes fadeInDown{
-    from{ opacity:0; transform:translateY(-15px); }
-    to{ opacity:1; transform:translateY(0); }
+  .stats{ display:flex; justify-content:space-around; align-items:center; gap:6px; }
+  .stat{ flex:1; }
+  .stat-label{ font-size:10px; color:#666; font-weight:bold; }
+  .stat-value{ font-size:20px; font-weight:bold; color:#e65100; font-variant-numeric:tabular-nums; }
+
+  /* ============ مزرعه ============ */
+  .field{
+    position:relative; width:100%; max-width:720px;
+    flex:1 1 auto; min-height:0; margin:10px 0;
+    border-radius:20px; overflow:hidden;
+    border:3px solid #8d6e63;
+    box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    cursor:default;
   }
 
-  .menu{ display:flex; flex-direction:column; gap:18px; width:100%; }
-
-  /* کارت بازی */
-  .game-card{
-    position:relative; display:flex; flex-direction:row; align-items:center; gap:16px;
-    background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
-    border-radius:22px; padding:18px 20px;
-    text-decoration:none; color:#1b5e20;
-    box-shadow: 0 12px 28px rgba(46,125,50,0.18), 0 3px 8px rgba(0,0,0,0.06);
-    border:2px solid #c5e1a5;
-    overflow:hidden;
-    transform: translateY(50px); opacity: 0;
-    animation: cardEnter 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-    cursor:pointer;
+  /* آسمان */
+  .sky{
+    position:absolute; top:0; left:0; right:0; bottom:55%;
+    background: linear-gradient(180deg,#4fc3f7 0%,#81d4fa 45%,#b3e5fc 75%,#e1f5fe 100%);
   }
-  .game-card:nth-child(1){ animation-delay: 0.2s; }
-  .game-card:nth-child(2){ animation-delay: 0.4s; }
-
-  @keyframes cardEnter{ to{ transform: translateY(0); opacity: 1; } }
-
-  .game-card:active{
-    transform: scale(0.96);
-    box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+  /* خورشید */
+  .sun{
+    position:absolute; top:8%; right:8%;
+    width:60px; height:60px; border-radius:50%;
+    background: radial-gradient(circle,#fff59d 0%,#ffeb3b 55%,#fbc02d 100%);
+    box-shadow: 0 0 30px 10px rgba(255,235,59,.6), 0 0 60px 20px rgba(255,193,7,.35);
+    animation: sunPulse 4s ease-in-out infinite;
   }
-
-  /* درخشش */
-  .game-card::before{
-    content:''; position:absolute; top:0; left:-100%;
-    width:60%; height:100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    transform: skewX(-20deg);
-    animation: shimmer 3.5s ease-in-out infinite;
-    animation-delay: 1s;
+  @keyframes sunPulse{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.06); }
   }
-  @keyframes shimmer{ 0%{ left:-100%; } 50%{ left:150%; } 100%{ left:150%; } }
-
-  .card-svg{
-    width:64px; height:64px; flex-shrink:0;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
-    animation: bounce 2.2s ease-in-out infinite;
+  /* ابرها */
+  .cloud{
+    position:absolute; background:#fff; border-radius:50px;
+    opacity:.85; filter: blur(0.3px);
+    animation: cloudMove linear infinite;
   }
-  .game-card:nth-child(2) .card-svg{ animation-delay: 0.5s; }
-  @keyframes bounce{
-    0%,100%{ transform: translateY(0) rotate(-3deg); }
-    50%{ transform: translateY(-8px) rotate(3deg); }
+  .cloud::before, .cloud::after{
+    content:''; position:absolute; background:#fff; border-radius:50%;
+  }
+  .cloud::before{ width:60%; height:120%; top:-50%; left:10%; }
+  .cloud::after{ width:50%; height:100%; top:-35%; right:10%; }
+  @keyframes cloudMove{
+    from{ transform: translateX(-150px); }
+    to{ transform: translateX(calc(100vw + 150px)); }
   }
 
-  .card-info{ display:flex; flex-direction:column; gap:4px; flex:1; text-align:right; }
-  .card-info b{ font-size:17px; }
-  .card-info small{ font-weight:normal; color:#6b6b6b; font-size:12.5px; }
-
-  .card-arrow{
-    font-size:18px; flex-shrink:0;
-    animation: arrowMove 1.5s ease-in-out infinite;
-  }
-  @keyframes arrowMove{
-    0%,100%{ transform: translateX(0); }
-    50%{ transform: translateX(-6px); }
+  /* تپه‌های دور */
+  .hills{
+    position:absolute; left:0; right:0; bottom:45%; height:60px;
+    background: radial-gradient(ellipse 45% 100% at 20% 100%, #81c784 0%, #81c784 70%, transparent 72%),
+                radial-gradient(ellipse 55% 100% at 60% 100%, #aed581 0%, #aed581 70%, transparent 72%),
+                radial-gradient(ellipse 40% 100% at 90% 100%, #81c784 0%, #81c784 70%, transparent 72%);
   }
 
-  .game-card.rice{
-    background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
-    border-color:#ffe082;
+  /* نرده چوبی */
+  .fence{
+    position:absolute; left:0; right:0; bottom:52%; height:22px;
+    display:flex; justify-content:space-around; align-items:center;
   }
-  .game-card.rice .card-arrow{ color:#f9a825; }
+  .fence::before{
+    content:''; position:absolute; left:0; right:0; top:50%;
+    height:3px; background:#8d6e63; transform: translateY(-50%);
+  }
+  .fence-post{
+    width:5px; height:22px; background:#6d4c41;
+    border-radius:2px 2px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0,0,0,.2);
+  }
 
-  .game-card.scarecrow{
-    background: linear-gradient(135deg, #ffffff 0%, #ffe0b2 100%);
-    border-color:#ffb74d;
+  /* زمین مزرعه */
+  .farm{
+    position:absolute; left:0; right:0; bottom:0; height:55%;
+    background: linear-gradient(180deg,#c5e1a5 0%,#aed581 12%,#8bc34a 40%,#689f38 100%);
   }
-  .game-card.scarecrow .card-arrow{ color:#e65100; }
+  /* شیارهای مزرعه */
+  .farm::before{
+    content:''; position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 12px, rgba(0,0,0,.06) 12px 14px),
+      repeating-linear-gradient(180deg, transparent 0 8px, rgba(255,255,255,.04) 8px 10px);
+    pointer-events:none;
+  }
+  /* خوشه‌های برنج روی زمین */
+  .farm::after{
+    content:''; position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 8% 20%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 15% 45%, #f9a825 0 3px, transparent 3px),
+      radial-gradient(circle at 22% 75%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 30% 30%, #f9a825 0 3px, transparent 3px),
+      radial-gradient(circle at 38% 65%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 46% 25%, #f9a825 0 3px, transparent 3px),
+      radial-gradient(circle at 54% 80%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 62% 40%, #f9a825 0 3px, transparent 3px),
+      radial-gradient(circle at 70% 70%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 78% 22%, #f9a825 0 3px, transparent 3px),
+      radial-gradient(circle at 86% 55%, #fbc02d 0 3px, transparent 3px),
+      radial-gradient(circle at 94% 78%, #f9a825 0 3px, transparent 3px);
+    background-size: 100% 100%;
+    pointer-events:none;
+    opacity:.75;
+  }
 
-  .footer{
-    margin-top:26px; color:#33691e; font-size:12.5px; text-align:center;
-    animation: fadeInDown 1.2s ease both;
-    animation-delay: 0.6s;
+  /* مترسک */
+  .scarecrow-wrap{
+    position:absolute; left:50%; bottom:14%;
+    transform: translateX(-50%);
+    width:150px; height:210px;
+    cursor:pointer; z-index:5;
+    filter: drop-shadow(0 14px 18px rgba(0,0,0,.35));
+    touch-action: manipulation;
   }
-  .footer .heart{
-    display:inline-block;
-    animation: heartBeat 1.2s ease-in-out infinite;
+  .scarecrow-wrap svg{
+    width:100%; height:100%; display:block;
+    transform-origin: 50% 92%;
+    animation: sway 3s ease-in-out infinite;
   }
-  @keyframes heartBeat{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.35); } }
+  @keyframes sway{
+    0%,100%{ transform: rotate(-2deg); }
+    50%{ transform: rotate(2deg); }
+  }
+  .scarecrow-wrap.shaking svg{ animation: shake 0.45s ease-in-out; }
+  @keyframes shake{
+    0%{ transform: rotate(0deg); }
+    15%{ transform: rotate(-20deg); }
+    35%{ transform: rotate(18deg); }
+    55%{ transform: rotate(-14deg); }
+    75%{ transform: rotate(10deg); }
+    100%{ transform: rotate(0deg); }
+  }
+  .scarecrow-wrap.inactive{ opacity:.35; pointer-events:none; filter: grayscale(.5) drop-shadow(0 14px 18px rgba(0,0,0,.35)); }
 
-  /* دکمه صدا */
-  .sound-btn{
-    position:fixed; top:calc(14px + env(safe-area-inset-top)); left:14px;
-    width:40px; height:40px; border-radius:50%;
-    background:rgba(255,255,255,0.85); border:2px solid #a5d6a7;
-    font-size:18px; cursor:pointer; z-index:30;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.15s ease;
+  /* پرنده‌ها */
+  .bird{
+    position:absolute; font-size:40px; line-height:1;
+    user-select:none; pointer-events:none;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.3));
+    z-index:8;
+    will-change: left, top, transform;
   }
-  .sound-btn:active{ transform:scale(0.9); }
+  .bird.perched{ animation: perch-wobble 0.7s ease-in-out infinite; }
+  @keyframes perch-wobble{
+    0%,100%{ transform: rotate(-10deg) scale(1); }
+    50%{ transform: rotate(10deg) scale(1.05); }
+  }
+  .bird.scared{ animation: scared-fly 0.55s ease-out forwards; }
+  @keyframes scared-fly{
+    0%{ transform: scale(1) rotate(0); opacity:1; }
+    40%{ transform: scale(1.5) rotate(35deg); opacity:1; }
+    100%{ transform: scale(0.5) rotate(-50deg) translateY(-80px); opacity:0; }
+  }
 
-  /* صفحه شروع (برای فعال شدن صدا) */
-  .start-overlay{
-    position:fixed; inset:0; z-index:100;
-    background: linear-gradient(160deg, #1b5e20 0%, #2e7d32 100%);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:20px; color:#fff; text-align:center; padding:30px;
-    transition: opacity 0.5s ease;
+  /* اعداد شناور */
+  .floating-number{
+    position:absolute; font-size:28px; font-weight:bold; color:#1b5e20;
+    text-shadow:1px 1px 3px rgba(255,255,255,1); pointer-events:none;
+    animation:floatUp .9s ease-out forwards; z-index:20;
   }
-  .start-overlay.hide{ opacity:0; pointer-events:none; }
-  .start-overlay h1{ font-size:34px; margin:0; text-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-  .start-overlay p{ font-size:14px; opacity:0.9; margin:0; }
-  .start-btn{
-    margin-top:16px;
-    padding:14px 40px; font-size:18px; font-weight:bold;
-    background:#ffd54f; color:#1b5e20; border:0; border-radius:50px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+  @keyframes floatUp{
+    0%{ opacity:1; transform:translateY(0) scale(1); }
+    70%{ transform:translateY(-60px) scale(1.15); }
+    100%{ opacity:0; transform:translateY(-110px) scale(.85); }
+  }
+
+  /* ============ دکمه‌های روی مزرعه ============ */
+  .overlay{
+    position:absolute; inset:0; z-index:60;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:14px; padding:20px;
+    background: rgba(0,0,0,.25);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .overlay.hidden{ display:none; }
+
+  .overlay-title{
+    font-size:22px; font-weight:bold; color:#fff;
+    text-shadow:0 3px 8px rgba(0,0,0,.5);
+    text-align:center; margin-bottom:4px;
+  }
+  .overlay-sub{
+    font-size:14px; color:#fff; opacity:.9;
+    text-shadow:0 2px 6px rgba(0,0,0,.5);
+    text-align:center;
+  }
+
+  .big-btn{
+    padding:16px 42px;
+    font-size:20px; font-weight:bold;
+    background: linear-gradient(135deg,#ffb300 0%,#f57c00 100%);
+    color:#fff; border:0; border-radius:50px;
+    box-shadow:0 8px 22px rgba(245,124,0,.5), inset 0 -3px 0 rgba(0,0,0,.15);
     cursor:pointer; font-family:inherit;
-    animation: pulse 1.8s ease-in-out infinite;
+    transition: transform .1s ease, box-shadow .2s ease;
+    text-shadow:0 1px 3px rgba(0,0,0,.3);
+    animation: bigPulse 2s ease-in-out infinite;
   }
-  @keyframes pulse{
-    0%,100%{ transform: scale(1); box-shadow:0 6px 20px rgba(0,0,0,0.25); }
-    50%{ transform: scale(1.06); box-shadow:0 8px 28px rgba(255,213,79,0.5); }
+  .big-btn:active{ transform:scale(.95); box-shadow:0 4px 12px rgba(245,124,0,.5); }
+  @keyframes bigPulse{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.04); }
+  }
+
+  .big-btn.green{
+    background: linear-gradient(135deg,#66bb6a 0%,#2e7d32 100%);
+    box-shadow:0 8px 22px rgba(46,125,50,.5), inset 0 -3px 0 rgba(0,0,0,.15);
+  }
+  .big-btn.red{
+    background: linear-gradient(135deg,#ef5350 0%,#c62828 100%);
+    box-shadow:0 8px 22px rgba(198,40,40,.5), inset 0 -3px 0 rgba(0,0,0,.15);
+  }
+
+  /* دکمه‌های گوشه */
+  .corner-actions{
+    position:absolute; top:10px; left:10px; right:10px;
+    display:flex; justify-content:space-between; z-index:15;
+    pointer-events:none;
+  }
+  .corner-actions > *{ pointer-events:auto; }
+
+  .corner-btn{
+    padding:8px 14px; font-size:13px; font-weight:bold;
+    background: rgba(255,255,255,.92); color:#5d4037;
+    border:2px solid #ffb74d; border-radius:12px;
+    cursor:pointer; font-family:inherit;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+    display:none;
+  }
+  .corner-btn:active{ transform:scale(.94); }
+
+  /* ============ پایان بازی ============ */
+  .gameover{
+    position:absolute; inset:0; background:rgba(0,0,0,.78);
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    color:#fff; text-align:center; padding:24px; z-index:70; gap:14px;
+  }
+  .gameover.show{ display:flex; animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  .gameover h2{ font-size:28px; color:#ffcc80; }
+  .gameover .score-row{
+    display:flex; flex-direction:column; gap:6px;
+    background: rgba(255,255,255,.1); border-radius:16px;
+    padding:16px 30px; border:2px solid rgba(255,204,128,.3);
+  }
+  .gameover .score-row p{ font-size:15px; }
+  .gameover b{ color:#ffcc80; font-size:22px; }
+
+  /* ============ فوتر ============ */
+  .footer{
+    text-align:center; color:#fff; font-size:13px; font-weight:bold;
+    background:rgba(0,0,0,.35); padding:8px 20px; border-radius:15px;
+    width:100%; max-width:720px;
+    text-shadow:0 1px 3px rgba(0,0,0,.5);
+  }
+
+  @media (max-width: 400px){
+    .overlay-title{ font-size:18px; }
+    .big-btn{ padding:14px 34px; font-size:17px; }
+    .scarecrow-wrap{ width:130px; height:182px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- صفحه شروع -->
-  <div class="start-overlay" id="startOverlay">
-    <div style="font-size:70px;">🌾</div>
-    <h1>برنج یار</h1>
-    <p>برای شروع، لمس کن</p>
-    <button class="start-btn" id="startBtn" type="button">شروع ▶</button>
-  </div>
-
-  <!-- ذرات شناور -->
-  <div class="particles" id="particles"></div>
-
-  <!-- دکمه صدا -->
-  <button class="sound-btn" id="soundBtn" type="button" aria-label="صدا">🔊</button>
-
-  <div class="content">
-    <h1 class="title">
-      <span>🌾</span>
-      برنج یار
-      <span>🌾</span>
-    </h1>
-    <p class="subtitle">یکی از بازی‌ها رو انتخاب کن و شروع کن!</p>
-
-    <div class="menu">
-      <a class="game-card rice" href="rice.html" data-sound="rice">
-        <svg class="card-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <!-- خوشه برنج طلایی -->
-          <path d="M 32 58 L 32 24" stroke="#8d6e63" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <ellipse cx="32" cy="52" rx="5" ry="3" fill="#a5d6a7" opacity="0.7"/>
-          <g fill="#fbc02d">
-            <ellipse cx="26" cy="20" rx="4" ry="6.5" transform="rotate(-30 26 20)"/>
-            <ellipse cx="38" cy="20" rx="4" ry="6.5" transform="rotate(30 38 20)"/>
-            <ellipse cx="28" cy="28" rx="4" ry="6.5" transform="rotate(-25 28 28)"/>
-            <ellipse cx="36" cy="28" rx="4" ry="6.5" transform="rotate(25 36 28)"/>
-            <ellipse cx="30" cy="36" rx="4" ry="6.5" transform="rotate(-20 30 36)"/>
-            <ellipse cx="34" cy="36" rx="4" ry="6.5" transform="rotate(20 34 36)"/>
-            <ellipse cx="32" cy="14" rx="4" ry="6" transform="rotate(0 32 14)"/>
-          </g>
-          <g fill="#fdd835">
-            <ellipse cx="27" cy="24" rx="2.5" ry="4" transform="rotate(-30 27 24)"/>
-            <ellipse cx="37" cy="24" rx="2.5" ry="4" transform="rotate(30 37 24)"/>
-            <ellipse cx="32" cy="18" rx="2.5" ry="4"/>
-          </g>
-          <circle cx="32" cy="14" r="1.5" fill="#fff9c4"/>
-        </svg>
-        <span class="card-info">
-          <b>بازی شالیزار برنج یار</b>
-          <small>شالیزار رو لمس کن و کوین جمع کن</small>
-        </span>
-        <span class="card-arrow">◀</span>
-      </a>
-
-      <a class="game-card scarecrow" href="scarecrow.html" data-sound="scarecrow">
-        <svg class="card-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <!-- مترسک کوچک -->
-          <rect x="8" y="30" width="48" height="3" fill="#8d6e63" rx="1.5"/>
-          <rect x="30" y="20" width="4" height="42" fill="#8d6e63" rx="1"/>
-          <!-- کاه دست چپ و راست -->
-          <path d="M 10 30 L 4 26 M 10 32 L 3 34" stroke="#fbc02d" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M 54 30 L 60 26 M 54 32 L 61 34" stroke="#fbc02d" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- پیراهن -->
-          <path d="M 22 33 Q 19 50 22 54 L 42 54 Q 45 50 42 33 Z" fill="#ef6c00" stroke="#bf360c" stroke-width="1"/>
-          <rect x="27" y="40" width="6" height="6" fill="#8d6e63" transform="rotate(10 30 43)"/>
-          <!-- کاه پایین -->
-          <path d="M 22 54 L 19 61 M 27 54 L 25 62 M 33 54 L 33 62 M 38 54 L 40 62 M 42 54 L 45 61"
-                stroke="#fbc02d" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- سر -->
-          <circle cx="32" cy="26" r="9" fill="#ffe0b2" stroke="#8d6e63" stroke-width="1"/>
-          <!-- کلاه -->
-          <ellipse cx="32" cy="18" rx="14" ry="3" fill="#8d6e63"/>
-          <path d="M 24 18 L 26 8 Q 32 5 38 8 L 40 18 Z" fill="#795548"/>
-          <rect x="24" y="15" width="16" height="3" fill="#d84315"/>
-          <!-- چشم‌ها -->
-          <circle cx="29" cy="25" r="1.3" fill="#3e2723"/>
-          <circle cx="35" cy="25" r="1.3" fill="#3e2723"/>
-          <path d="M 28 31 Q 32 33 36 31" stroke="#3e2723" stroke-width="0.8" fill="none" stroke-dasharray="1.5,1.5"/>
-        </svg>
-        <span class="card-info">
-          <b>بازی مترسک برنج یار</b>
-          <small>مترسک رو تکون بده و پرنده‌ها رو بپرون</small>
-        </span>
-        <span class="card-arrow">◀</span>
-      </a>
-    </div>
-
-    <div class="footer">
-      ساخته شده با <span class="heart">💚</span> برای کشاورزان دیجیتال
+  <!-- هدر با شمارنده‌ها -->
+  <div class="header">
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">🪙 کوین</div>
+        <div class="stat-value" id="coinCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">⏱ زمان</div>
+        <div class="stat-value" id="timeCount">30</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">🐦 دفع‌شده</div>
+        <div class="stat-value" id="birdCount">0</div>
+      </div>
     </div>
   </div>
+
+  <!-- مزرعه -->
+  <div class="field" id="field">
+
+    <!-- آسمان -->
+    <div class="sky">
+      <div class="sun"></div>
+      <div class="cloud" style="width:70px;height:22px;top:10%;left:5%;animation-duration:45s;"></div>
+      <div class="cloud" style="width:90px;height:26px;top:22%;left:60%;animation-duration:60s;animation-delay:-15s;"></div>
+      <div class="cloud" style="width:55px;height:18px;top:5%;left:35%;animation-duration:50s;animation-delay:-30s;"></div>
+    </div>
+
+    <!-- تپه‌ها -->
+    <div class="hills"></div>
+
+    <!-- نرده -->
+    <div class="fence" id="fence"></div>
+
+    <!-- مزرعه -->
+    <div class="farm"></div>
+
+    <!-- مترسک -->
+    <div class="scarecrow-wrap" id="scarecrow" aria-label="مترسک">
+      <svg viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="125" width="156" height="11" fill="#8d6e63" rx="4"/>
+        <rect x="94" y="80" width="12" height="180" fill="#8d6e63" rx="3"/>
+        <path d="M 26 122 L 10 106 M 26 131 L 6 142 M 26 127 L 2 127"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M 174 122 L 190 106 M 174 131 L 194 142 M 174 127 L 198 127"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M 60 130 Q 52 212 66 226 L 134 226 Q 148 212 140 130 Z"
+              fill="#ef6c00" stroke="#bf360c" stroke-width="2"/>
+        <rect x="76" y="162" width="22" height="22" fill="#8d6e63" transform="rotate(8 87 173)"/>
+        <rect x="105" y="188" width="18" height="18" fill="#5d4037" transform="rotate(-6 114 197)"/>
+        <path d="M 66 226 L 56 250 M 79 226 L 73 254 M 91 226 L 87 256 M 103 226 L 99 256 M 115 226 L 119 254 M 128 226 L 138 250"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <circle cx="100" cy="98" r="33" fill="#ffe0b2" stroke="#8d6e63" stroke-width="2"/>
+        <ellipse cx="100" cy="70" rx="50" ry="11" fill="#8d6e63"/>
+        <ellipse cx="100" cy="70" rx="50" ry="11" fill="none" stroke="#5d4037" stroke-width="1.5"/>
+        <path d="M 72 70 L 78 30 Q 100 20 122 30 L 128 70 Z" fill="#795548"/>
+        <rect x="72" y="64" width="56" height="10" fill="#d84315"/>
+        <circle cx="88" cy="94" r="4.5" fill="#3e2723"/>
+        <circle cx="112" cy="94" r="4.5" fill="#3e2723"/>
+        <circle cx="89" cy="93" r="1.3" fill="#fff"/>
+        <circle cx="113" cy="93" r="1.3" fill="#fff"/>
+        <polygon points="100,102 95,111 105,111" fill="#e65100"/>
+        <path d="M 84 116 Q 100 124 116 116" stroke="#3e2723" stroke-width="2.2"
+              fill="none" stroke-dasharray="3,3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- دکمه‌های گوشه (پایان بازی) -->
+    <div class="corner-actions">
+      <button class="corner-btn" id="stopBtn" type="button">⏹ پایان</button>
+      <button class="corner-btn" id="soundBtn" type="button">🔊</button>
+    </div>
+
+    <!-- صفحه شروع -->
+    <div class="overlay" id="startOverlay">
+      <div class="overlay-title">🌾 برنج یار 🌾</div>
+      <div class="overlay-sub">مترسک رو تکون بده تا پرنده‌ها بپرن!</div>
+      <button class="big-btn" id="startBtn" type="button">▶ شروع بازی</button>
+    </div>
+
+    <!-- پایان بازی -->
+    <div class="gameover" id="gameover">
+      <h2>🎉 پایان بازی!</h2>
+      <div class="score-row">
+        <p>امتیاز این دور: <b id="finalScore">0</b> کوین</p>
+        <p>پرنده‌های دفع‌شده: <b id="finalBirds">0</b></p>
+      </div>
+      <button class="big-btn green" id="againBtn" type="button">🔄 دوباره بازی کن</button>
+      <button class="big-btn red" id="sendBtn" type="button">📤 ارسال به ربات</button>
+    </div>
+
+  </div>
+
+  <div class="footer">مترسک رو تکون بده تا پرنده‌های اطرافش بپرن! 🐦🌾</div>
 
 <script>
 (function () {
@@ -288,169 +397,124 @@
   const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
   if (tg) { try { tg.ready(); tg.expand(); } catch (e) {} }
 
-  /* ---------- Audio Engine ---------- */
-  let audioCtx = null;
-  let musicPlaying = false;
-  let musicTimeout = null;
-  let soundEnabled = true;
+  const STORAGE_KEY = 'syc_total_v1';
 
+  const coinCountEl = document.getElementById('coinCount');
+  const timeCountEl = document.getElementById('timeCount');
+  const birdCountEl = document.getElementById('birdCount');
+  const field       = document.getElementById('field');
+  const fence       = document.getElementById('fence');
+  const scarecrow   = document.getElementById('scarecrow');
+  const gameover    = document.getElementById('gameover');
+  const startOverlay= document.getElementById('startOverlay');
+  const finalScore  = document.getElementById('finalScore');
+  const finalBirds  = document.getElementById('finalBirds');
+  const startBtn    = document.getElementById('startBtn');
+  const stopBtn     = document.getElementById('stopBtn');
+  const againBtn    = document.getElementById('againBtn');
+  const sendBtn     = document.getElementById('sendBtn');
+  const soundBtn    = document.getElementById('soundBtn');
+
+  let coins = 0, birdsDefeated = 0, timeLeft = 30;
+  let playing = false;
+  let timer = null, spawner = null;
+  let totalCoins = 0;
+  let soundEnabled = true;
+  const activeBirds = [];
+
+  /* ============ ساخت نرده‌ها ============ */
+  (function buildFence(){
+    const N = 14;
+    for (let i = 0; i < N; i++) {
+      const post = document.createElement('div');
+      post.className = 'fence-post';
+      fence.appendChild(post);
+    }
+  })();
+
+  /* ============ Audio ============ */
+  let audioCtx = null;
   function getAudioCtx() {
     if (!audioCtx) {
-      try {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) { return null; }
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { return null; }
     }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (e) {} }
     return audioCtx;
   }
 
-  /* ---------- صدای لمس کارت ---------- */
-  function playTapSound() {
+  function playBirdChirp() {
     if (!soundEnabled) return;
     const ctx = getAudioCtx(); if (!ctx) return;
     const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, now);
-    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
-    gain.gain.setValueAtTime(0.18, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(now); osc.stop(now + 0.16);
+    for (let i = 0; i < 2; i++) {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1500 + i*200, now + i*0.09);
+      osc.frequency.exponentialRampToValueAtTime(2400 + i*200, now + i*0.09 + 0.05);
+      gain.gain.setValueAtTime(0.08, now + i*0.09);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.09 + 0.08);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i*0.09);
+      osc.stop(now + i*0.09 + 0.1);
+    }
   }
 
-  /* ---------- موسیقی پس‌زمینه ریتمیک ---------- */
-  function playMusicNote(freq, duration, type, volume) {
+  function playScaredSound() {
+    if (!soundEnabled) return;
     const ctx = getAudioCtx(); if (!ctx) return;
     const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type || 'triangle';
-    osc.frequency.setValueAtTime(freq, now);
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(volume || 0.08, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + duration + 0.05);
-  }
-
-  // ملودی شاد پنتاتونیک
-  const melody = [
-    { n: 523.25, d: 0.35 }, { n: 659.25, d: 0.35 }, { n: 783.99, d: 0.45 },
-    { n: 659.25, d: 0.35 }, { n: 880.00, d: 0.5 },
-    { n: 783.99, d: 0.35 }, { n: 659.25, d: 0.35 }, { n: 587.33, d: 0.45 },
-    { n: 523.25, d: 0.55 },
-    { n: 440.00, d: 0.35 }, { n: 523.25, d: 0.35 }, { n: 659.25, d: 0.45 },
-    { n: 587.33, d: 0.35 }, { n: 523.25, d: 0.6 }
-  ];
-  let melodyIndex = 0;
-
-  function playMusicLoop() {
-    if (!musicPlaying) return;
-    const note = melody[melodyIndex % melody.length];
-    playMusicNote(note.n, note.d, 'triangle', 0.07);
-    // بیس ملایم
-    if (melodyIndex % 4 === 0) {
-      playMusicNote(note.n / 4, 0.4, 'sine', 0.05);
+    for (let i = 0; i < 3; i++) {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1600 + i*250, now + i*0.05);
+      osc.frequency.exponentialRampToValueAtTime(3000 + i*300, now + i*0.05 + 0.05);
+      gain.gain.setValueAtTime(0.12, now + i*0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.05 + 0.08);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i*0.05);
+      osc.stop(now + i*0.05 + 0.1);
     }
-    melodyIndex++;
-    musicTimeout = setTimeout(playMusicLoop, note.d * 1000 + 60);
   }
 
-  function startMusic() {
-    if (musicPlaying || !soundEnabled) return;
+  function playShakeSound() {
+    if (!soundEnabled) return;
     const ctx = getAudioCtx(); if (!ctx) return;
-    musicPlaying = true;
-    melodyIndex = 0;
-    playMusicLoop();
-  }
-
-  function stopMusic() {
-    musicPlaying = false;
-    if (musicTimeout) { clearTimeout(musicTimeout); musicTimeout = null; }
-  }
-
-  /* ---------- ذرات شناور پس‌زمینه ---------- */
-  const particleEmojis = ['🌾','🎃','🐦','🌱','🌿','✨','💚','🌾','🍃','⭐','🌾','🐦'];
-  const particlesBox = document.getElementById('particles');
-  for (let i = 0; i < 14; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.textContent = particleEmojis[Math.floor(Math.random() * particleEmojis.length)];
-    p.style.left = Math.random() * 100 + '%';
-    p.style.fontSize = (20 + Math.random() * 22) + 'px';
-    p.style.animationDuration = (9 + Math.random() * 10) + 's';
-    p.style.animationDelay = (Math.random() * 12) + 's';
-    particlesBox.appendChild(p);
-  }
-
-  /* ---------- دکمه شروع (فعال‌سازی صدا) ---------- */
-  const startOverlay = document.getElementById('startOverlay');
-  const startBtnEl = document.getElementById('startBtn');
-  startBtnEl.addEventListener('click', function () {
-    getAudioCtx();
-    startOverlay.classList.add('hide');
-    startMusic();
-    try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('medium'); } catch (e) {}
-  });
-
-  /* ---------- لمس کارت‌ها + صدای مخصوص ---------- */
-  document.querySelectorAll('.game-card').forEach(function (card) {
-    card.addEventListener('pointerdown', function (ev) {
-      if (ev.isPrimary === false) return;
-      playTapSound();
-      try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('heavy'); } catch (e) {}
-
-      // صدای مخصوص هر بازی
-      const type = card.getAttribute('data-sound');
-      if (type === 'scarecrow') {
-        // صدای پرنده
-        setTimeout(function () {
-          const ctx = getAudioCtx(); if (!ctx) return;
-          const now = ctx.currentTime;
-          for (let i = 0; i < 3; i++) {
-            const o = ctx.createOscillator();
-            const g = ctx.createGain();
-            o.type = 'sine';
-            o.frequency.setValueAtTime(1400 + i*300, now + i*0.07);
-            o.frequency.exponentialRampToValueAtTime(2600 + i*300, now + i*0.07 + 0.05);
-            g.gain.setValueAtTime(0.12, now + i*0.07);
-            g.gain.exponentialRampToValueAtTime(0.001, now + i*0.07 + 0.08);
-            o.connect(g).connect(ctx.destination);
-            o.start(now + i*0.07);
-            o.stop(now + i*0.07 + 0.1);
-          }
-        }, 80);
-      }
-    });
-  });
-
-  /* ---------- دکمه صدا ---------- */
-  const soundBtn = document.getElementById('soundBtn');
-  soundBtn.addEventListener('click', function (ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    soundEnabled = !soundEnabled;
-    if (soundEnabled) {
-      soundBtn.textContent = '🔊';
-      startMusic();
-      playTapSound();
-    } else {
-      soundBtn.textContent = '🔇';
-      stopMusic();
+    const now = ctx.currentTime;
+    const bufferSize = Math.floor(ctx.sampleRate * 0.4);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 1.3);
     }
-    try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (e) {}
-  });
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass'; filter.frequency.value = 800; filter.Q.value = 0.8;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.14, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    noise.connect(filter).connect(gain).connect(ctx.destination);
+    noise.start(now); noise.stop(now + 0.45);
 
-  /* ---------- توقف صدا وقتی از صفحه خارج می‌شویم ---------- */
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') stopMusic();
-    else if (soundEnabled) startMusic();
-  });
+    const osc = ctx.createOscillator(), g2 = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+    g2.gain.setValueAtTime(0.10, now);
+    g2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc.connect(g2).connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.42);
+  }
 
-})();
-</script>
-</body>
-</html>
+  function playScoreSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+    [660, 880, 1100].forEach(function (freq, i) {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.10, now + i*0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.06 + 0.15);
+      osc.c
