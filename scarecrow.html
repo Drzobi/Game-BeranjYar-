@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>بازی‌های برنج یار</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  body{
+    font-family:Tahoma, system-ui, sans-serif;
+    background:linear-gradient(180deg,#e8f5e9 0%,#c8e6c9 100%);
+    margin:0; min-height:100vh; min-height:100dvh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:20px; user-select:none; -webkit-user-select:none;
+  }
+  h1{
+    color:#1b5e20; font-size:26px; margin-bottom:8px; text-align:center;
+  }
+  p.sub{
+    color:#555; font-size:14px; margin:0 0 28px; text-align:center;
+  }
+  .menu{
+    display:flex; flex-direction:column; gap:16px;
+    width:100%; max-width:400px;
+  }
+  .game-card{
+    display:flex; align-items:center; gap:16px;
+    background:#fff; border-radius:18px; padding:18px 20px;
+    text-decoration:none; color:#1b5e20; font-weight:bold; font-size:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    border:2px solid #a5d6a7;
+    transition:transform .1s ease;
+  }
+  .game-card:active{ transform:scale(.97); }
+  .game-card .emoji{ font-size:44px; line-height:1; }
+  .game-card .info{ display:flex; flex-direction:column; }
+  .game-card .info small{ font-weight:normal; color:#666; font-size:13px; margin-top:4px; }
+</style>
+</head>
+<body>
+  <h1>🌾 برنج یار 🌾</h1>
+  <p class="sub">یکی از بازی‌ها رو انتخاب کن</p>
+
+  <div class="menu">
+    <a class="game-card" href="rice.html">
+      <span class="emoji">🌾</span>
+      <span class="info">
+        بازی شالیزار برنج یار
+        <small>شالیزار رو لمس کن و کوین جمع کن</small>
+      </span>
+    </a>
+
+    <a class="game-card" href="scarecrow.html">
+      <span class="emoji">🎃</span>
+      <span class="info">
+        بازی مترسک برنج یار
+        <small>مترسک رو بزن و پرنده‌ها رو دفع کن</small>
+      </span>
+    </a>
+  </div>
+</body>
+</html>
