@@ -36,6 +36,7 @@
   }
   .btn:active{ filter:brightness(.92); }
   .btn.secondary{ background:#ffe0b2; color:#5d4037; }
+  .btn:disabled{ opacity:0.6; cursor:not-allowed; }
 
   .field{
     position:relative; width:100%; max-width:720px;
@@ -46,7 +47,7 @@
     box-shadow: inset 0 -30px 40px -20px rgba(76,175,80,.35);
   }
   .ground{
-    position:absolute; left:0; right:0; bottom:0; height:38%;
+    position:absolute; left:0; right:0; bottom:0; height:36%;
     background:linear-gradient(180deg,#aed581 0%,#7cb342 60%,#558b2f 100%);
     border-top:3px solid #689f38;
   }
@@ -55,55 +56,90 @@
     background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 2px, transparent 2px 12px);
   }
 
-  .scarecrow{
-    position:absolute; left:50%; bottom:18%;
-    transform:translateX(-50%);
-    font-size:110px; line-height:1;
-    cursor:pointer; background:none; border:0; padding:0; outline:none;
-    transition:transform .08s ease;
-    filter:drop-shadow(0 14px 18px rgba(0,0,0,.25));
+  /* ---------- مترسک SVG ---------- */
+  .scarecrow-wrap{
+    position:absolute; left:50%; bottom:11%;
+    transform: translateX(-50%);
+    width:150px; height:210px;
+    cursor:pointer;
     z-index:5;
+    filter: drop-shadow(0 14px 18px rgba(0,0,0,.25));
+    touch-action: manipulation;
+  }
+  .scarecrow-wrap svg{
+    width:100%; height:100%; display:block;
+    transform-origin: 50% 92%;
     animation: sway 3s ease-in-out infinite;
   }
   @keyframes sway{
-    0%,100%{ transform:translateX(-50%) rotate(-2deg); }
-    50%{ transform:translateX(-50%) rotate(2deg); }
+    0%,100%{ transform: rotate(-2deg); }
+    50%{ transform: rotate(2deg); }
   }
-  .scarecrow:active{ transform:translateX(-50%) scale(.9); animation:none; }
+  .scarecrow-wrap.shaking svg{
+    animation: shake 0.45s ease-in-out;
+  }
+  @keyframes shake{
+    0%{ transform: rotate(0deg); }
+    15%{ transform: rotate(-20deg); }
+    35%{ transform: rotate(18deg); }
+    55%{ transform: rotate(-14deg); }
+    75%{ transform: rotate(10deg); }
+    100%{ transform: rotate(0deg); }
+  }
+  .scarecrow-wrap:active svg{
+    transform: scale(0.94);
+  }
 
+  /* ---------- پرنده‌ها ---------- */
   .bird{
-    position:absolute; font-size:44px; line-height:1; cursor:pointer;
+    position:absolute; font-size:38px; line-height:1;
     background:none; border:0; padding:0; outline:none;
-    transition:transform .1s ease;
     filter:drop-shadow(0 4px 6px rgba(0,0,0,.2));
-    z-index:8;
-    animation: flap .6s ease-in-out infinite alternate;
+    z-index:8; pointer-events:none;
+    will-change: left, top, transform;
+    transition: opacity 0.3s;
   }
-  @keyframes flap{
-    from{ transform:scale(1) rotate(-4deg); }
-    to  { transform:scale(1.05) rotate(4deg); }
+  .bird.flying{
+    pointer-events:auto; cursor:pointer;
   }
-  .bird:active{ transform:scale(.8); }
+  .bird.perched{
+    animation: perch-wobble 0.7s ease-in-out infinite;
+  }
+  @keyframes perch-wobble{
+    0%,100%{ transform: rotate(-10deg) scale(1); }
+    50%{ transform: rotate(10deg) scale(1.05); }
+  }
+  .bird.scared{
+    animation: scared-fly 0.55s ease-out forwards;
+  }
+  @keyframes scared-fly{
+    0%{ transform: scale(1) rotate(0); opacity:1; }
+    40%{ transform: scale(1.5) rotate(35deg); opacity:1; }
+    100%{ transform: scale(0.5) rotate(-50deg) translateY(-80px); opacity:0; }
+  }
 
   .floating-number{
     position:absolute; font-size:26px; font-weight:bold; color:#d84315;
-    text-shadow:1px 1px 2px rgba(255,255,255,.8); pointer-events:none;
+    text-shadow:1px 1px 2px rgba(255,255,255,.9); pointer-events:none;
     animation:floatUp .9s ease-out forwards; z-index:20;
   }
   @keyframes floatUp{
     0%{ opacity:1; transform:translateY(0) scale(1); }
-    70%{ transform:translateY(-60px) scale(1.1); }
-    100%{ opacity:0; transform:translateY(-110px) scale(.9); }
+    70%{ transform:translateY(-60px) scale(1.15); }
+    100%{ opacity:0; transform:translateY(-110px) scale(.85); }
   }
 
   .gameover{
-    position:absolute; inset:0; background:rgba(0,0,0,.65);
+    position:absolute; inset:0; background:rgba(0,0,0,.7);
     display:none; flex-direction:column; align-items:center; justify-content:center;
     color:#fff; text-align:center; padding:20px; z-index:50; gap:12px;
   }
-  .gameover.show{ display:flex; }
+  .gameover.show{ display:flex; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
   .gameover h2{ margin:0; font-size:26px; color:#ffcc80; }
   .gameover p{ margin:0; font-size:16px; }
+  .gameover b{ color:#ffcc80; }
+
   .footer{
     text-align:center; color:#5d4037; font-size:14px; font-weight:bold;
     background:rgba(255,255,255,.7); padding:8px 20px; border-radius:15px;
@@ -124,7 +160,7 @@
         <div class="stat-value" id="timeCount">30</div>
       </div>
       <div class="stat">
-        <div class="stat-label">دفع پرنده</div>
+        <div class="stat-label">پرنده دفع‌شده</div>
         <div class="stat-value" id="birdCount">0</div>
       </div>
     </div>
@@ -137,7 +173,48 @@
 
   <div class="field" id="field">
     <div class="ground"></div>
-    <button class="scarecrow" id="scarecrow" type="button" aria-label="مترسک">🎃</button>
+
+    <div class="scarecrow-wrap" id="scarecrow" aria-label="مترسک">
+      <svg viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg">
+        <!-- چوب افقی برای شونه‌ها -->
+        <rect x="22" y="125" width="156" height="11" fill="#8d6e63" rx="4"/>
+        <!-- چوب عمودی -->
+        <rect x="94" y="80" width="12" height="180" fill="#8d6e63" rx="3"/>
+        <!-- کاه‌های دست چپ -->
+        <path d="M 26 122 L 10 106 M 26 131 L 6 142 M 26 127 L 2 127"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- کاه‌های دست راست -->
+        <path d="M 174 122 L 190 106 M 174 131 L 194 142 M 174 127 L 198 127"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- تنه (پیراهن) -->
+        <path d="M 60 130 Q 52 212 66 226 L 134 226 Q 148 212 140 130 Z"
+              fill="#ef6c00" stroke="#bf360c" stroke-width="2"/>
+        <!-- وصله‌ها -->
+        <rect x="76" y="162" width="22" height="22" fill="#8d6e63" transform="rotate(8 87 173)"/>
+        <rect x="105" y="188" width="18" height="18" fill="#5d4037" transform="rotate(-6 114 197)"/>
+        <!-- کاه‌های پایین -->
+        <path d="M 66 226 L 56 250 M 79 226 L 73 254 M 91 226 L 87 256 M 103 226 L 99 256 M 115 226 L 119 254 M 128 226 L 138 250"
+              stroke="#fbc02d" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- سر -->
+        <circle cx="100" cy="98" r="33" fill="#ffe0b2" stroke="#8d6e63" stroke-width="2"/>
+        <!-- لبه کلاه -->
+        <ellipse cx="100" cy="70" rx="50" ry="11" fill="#8d6e63"/>
+        <ellipse cx="100" cy="70" rx="50" ry="11" fill="none" stroke="#5d4037" stroke-width="1.5"/>
+        <!-- کلاه -->
+        <path d="M 72 70 L 78 30 Q 100 20 122 30 L 128 70 Z" fill="#795548"/>
+        <rect x="72" y="64" width="56" height="10" fill="#d84315"/>
+        <!-- چشم‌ها -->
+        <circle cx="88" cy="94" r="4.5" fill="#3e2723"/>
+        <circle cx="112" cy="94" r="4.5" fill="#3e2723"/>
+        <circle cx="89" cy="93" r="1.3" fill="#fff"/>
+        <circle cx="113" cy="93" r="1.3" fill="#fff"/>
+        <!-- بینی -->
+        <polygon points="100,102 95,111 105,111" fill="#e65100"/>
+        <!-- دهان (دوخت) -->
+        <path d="M 84 116 Q 100 124 116 116" stroke="#3e2723" stroke-width="2.2"
+              fill="none" stroke-dasharray="3,3" stroke-linecap="round"/>
+      </svg>
+    </div>
 
     <div class="gameover" id="gameover">
       <h2>پایان بازی!</h2>
@@ -147,7 +224,7 @@
     </div>
   </div>
 
-  <div class="footer">مترسک رو لمس کن تا کوین بگیری و پرنده‌ها رو قبل از خوردن برنج دفع کن! 🐦🌾</div>
+  <div class="footer">مترسک رو تکون بده تا پرنده‌ها از روی شونه‌ش بپرن! 🐦🌾</div>
 
 <script>
 (function () {
@@ -156,7 +233,7 @@
   const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
   if (tg) { try { tg.ready(); tg.expand(); } catch (e) {} }
 
-  const STORAGE_KEY = 'sycCoins_v1';
+  const STORAGE_KEY = 'sycCoins_v2';
 
   const coinCountEl = document.getElementById('coinCount');
   const timeCountEl = document.getElementById('timeCount');
@@ -175,6 +252,7 @@
   let timer = null, spawner = null;
   let totalCoins = 0;
   let saveTimer = null;
+  const activeBirds = new Set();
 
   function loadTotal() {
     try {
@@ -208,85 +286,137 @@
     setTimeout(function () { f.remove(); }, 900);
   }
 
-  scarecrow.addEventListener('pointerdown', function (ev) {
+  /* ---------- تکان دادن مترسک ---------- */
+  let shakeTimeout = null;
+  function shakeScarecrow() {
     if (!playing) return;
+
+    scarecrow.classList.remove('shaking');
+    void scarecrow.offsetWidth;
+    scarecrow.classList.add('shaking');
+    clearTimeout(shakeTimeout);
+    shakeTimeout = setTimeout(function () {
+      scarecrow.classList.remove('shaking');
+    }, 500);
+
+    // محدوده تکان: اطراف مترسک
+    const fieldRect = field.getBoundingClientRect();
+    const scRect = scarecrow.getBoundingClientRect();
+    const scCX = scRect.left + scRect.width / 2 - fieldRect.left;
+    const scCY = scRect.top + scRect.height / 2 - fieldRect.top;
+    const RANGE = 180;
+
+    activeBirds.forEach(function (b) {
+      if (b.scared) return;
+      const bx = parseFloat(b.el.style.left) + 18;
+      const by = parseFloat(b.el.style.top)  + 18;
+      const dx = bx - scCX, dy = by - scCY;
+      if (Math.sqrt(dx*dx + dy*dy) < RANGE) scareBird(b);
+    });
+
+    try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('medium'); } catch (e) {}
+  }
+
+  function scareBird(b) {
+    if (b.scared) return;
+    b.scared = true;
+    birdsDefeated += 1;
+    coins += 3;
+
+    const rect = field.getBoundingClientRect();
+    const bx = parseFloat(b.el.style.left) + 18;
+    const by = parseFloat(b.el.style.top)  + 18;
+    floatNumber(rect.left + bx, rect.top + by, '+3', '#1b5e20');
+
+    b.el.classList.remove('perched', 'flying');
+    b.el.classList.add('scared');
+    updateHUD();
+
+    setTimeout(function () {
+      b.el.remove();
+      activeBirds.delete(b);
+    }, 600);
+
+    try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
+  }
+
+  scarecrow.addEventListener('pointerdown', function (ev) {
     if (ev.isPrimary === false) return;
     ev.preventDefault();
-    coins += 1;
-    updateHUD();
-    floatNumber(ev.clientX, ev.clientY, '+1', '#d84315');
-    try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (e) {}
+    shakeScarecrow();
   });
 
+  /* ---------- ساخت پرنده ---------- */
   const BIRD_EMOJI = ['🐦', '🐦‍⬛', '🦅', '🕊️'];
 
   function spawnBird() {
     if (!playing) return;
-    const bird = document.createElement('button');
-    bird.className = 'bird';
-    bird.type = 'button';
-    bird.textContent = BIRD_EMOJI[Math.floor(Math.random() * BIRD_EMOJI.length)];
+    const el = document.createElement('div');
+    el.className = 'bird flying';
+    el.textContent = BIRD_EMOJI[Math.floor(Math.random() * BIRD_EMOJI.length)];
 
     const fieldRect = field.getBoundingClientRect();
-    const startX = Math.random() * (fieldRect.width - 50);
-    const startY = Math.random() * (fieldRect.height * 0.4);
+    const scRect = scarecrow.getBoundingClientRect();
 
-    bird.style.left = startX + 'px';
-    bird.style.top  = startY + 'px';
+    const edge = Math.floor(Math.random() * 4);
+    let startX, startY;
+    if (edge === 0) { startX = -50; startY = 60 + Math.random() * (fieldRect.height * 0.45); }
+    else if (edge === 1) { startX = fieldRect.width + 50; startY = 60 + Math.random() * (fieldRect.height * 0.45); }
+    else if (edge === 2) { startX = Math.random() * fieldRect.width; startY = -50; }
+    else { startX = Math.random() * fieldRect.width; startY = fieldRect.height * 0.55; }
 
-    let caught = false;
-    bird.addEventListener('pointerdown', function (ev) {
-      if (!playing || caught) return;
-      if (ev.isPrimary === false) return;
-      ev.preventDefault();
-      caught = true;
-      birdsDefeated += 1;
-      coins += 3;
-      updateHUD();
-      floatNumber(ev.clientX, ev.clientY, '+3', '#1b5e20');
-      bird.style.transform = 'scale(1.6) rotate(20deg)';
-      bird.style.opacity = '0';
-      setTimeout(function () { bird.remove(); }, 180);
-      try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
-    });
+    const scCX = scRect.left + scRect.width / 2 - fieldRect.left;
+    const scTopY = scRect.top - fieldRect.top;
+    const targetX = scCX + (Math.random() - 0.5) * 80;
+    const targetY = scTopY + 5 + Math.random() * 45;
 
-    field.appendChild(bird);
+    el.style.left = startX + 'px';
+    el.style.top  = startY + 'px';
+    field.appendChild(el);
 
-    const dir = Math.random() < 0.5 ? 1 : -1;
-    const speed = 40 + Math.random() * 60;
-    let x = startX;
-    const interval = setInterval(function () {
-      if (!playing || caught) { clearInterval(interval); return; }
-      x += dir * speed * 0.05;
-      if (x < 0 || x > fieldRect.width - 50) {
-        clearInterval(interval);
-        bird.style.transition = 'opacity .3s';
-        bird.style.opacity = '0';
-        setTimeout(function () { bird.remove(); }, 300);
-        return;
+    const b = { el: el, scared: false, startX: startX, startY: startY, targetX: targetX, targetY: targetY };
+    activeBirds.add(b);
+
+    const duration = 2000 + Math.random() * 1300;
+    const startTime = performance.now();
+
+    function animate(now) {
+      if (b.scared) return;
+      const p = Math.min((now - startTime) / duration, 1);
+      const ep = 1 - Math.pow(1 - p, 3);
+      el.style.left = (b.startX + (b.targetX - b.startX) * ep) + 'px';
+      el.style.top  = (b.startY + (b.targetY - b.startY) * ep) + 'px';
+      const ang = Math.atan2(b.targetY - b.startY, b.targetX - b.startX) * 180 / Math.PI;
+      el.style.transform = 'rotate(' + (ang * 0.12) + 'deg)';
+
+      if (p >= 1) {
+        // نشست روی مترسک
+        el.classList.remove('flying');
+        el.classList.add('perched');
+        el.style.transform = '';
+        el.style.pointerEvents = 'auto';
+        // بعد از ۴ ثانیه خودش می‌پره (بدون امتیاز)
+        setTimeout(function () {
+          if (b.scared) return;
+          b.scared = true;
+          el.classList.remove('perched');
+          el.classList.add('scared');
+          setTimeout(function () { el.remove(); activeBirds.delete(b); }, 600);
+        }, 4000);
+      } else {
+        requestAnimationFrame(animate);
       }
-      bird.style.left = x + 'px';
-    }, 50);
-
-    const life = 5000 + Math.random() * 3000;
-    setTimeout(function () {
-      if (caught) return;
-      caught = true;
-      bird.style.transition = 'opacity .3s, transform .3s';
-      bird.style.opacity = '0';
-      bird.style.transform = 'translateY(-30px)';
-      setTimeout(function () { bird.remove(); }, 300);
-    }, life);
+    }
+    requestAnimationFrame(animate);
   }
 
   function startGame() {
+    activeBirds.forEach(function (b) { b.el.remove(); });
+    activeBirds.clear();
     field.querySelectorAll('.bird').forEach(function (b) { b.remove(); });
     field.querySelectorAll('.floating-number').forEach(function (f) { f.remove(); });
 
-    coins = 0;
-    birdsDefeated = 0;
-    timeLeft = 30;
-    playing = true;
+    coins = 0; birdsDefeated = 0; timeLeft = 30; playing = true;
     gameover.classList.remove('show');
     updateHUD();
 
@@ -299,26 +429,33 @@
       if (timeLeft <= 0) endGame();
     }, 1000);
 
-    let spawnDelay = 1600;
+    let spawnDelay = 1700;
     function scheduleSpawn() {
       if (!playing) return;
       spawnBird();
-      spawnDelay = Math.max(600, spawnDelay - 60);
+      if (Math.random() < 0.35) spawnBird();
+      spawnDelay = Math.max(650, spawnDelay - 70);
       spawner = setTimeout(scheduleSpawn, spawnDelay);
     }
-    spawner = setTimeout(scheduleSpawn, 800);
+    spawner = setTimeout(scheduleSpawn, 500);
   }
 
   function endGame() {
     playing = false;
     clearInterval(timer);
     clearTimeout(spawner);
-    field.querySelectorAll('.bird').forEach(function (b) {
-      b.style.transition = 'opacity .3s';
-      b.style.opacity = '0';
-      setTimeout(function () { b.remove(); }, 300);
+
+    activeBirds.forEach(function (b) {
+      if (!b.scared) {
+        b.scared = true;
+        b.el.style.transition = 'opacity .3s';
+        b.el.style.opacity = '0';
+      }
     });
-    field.querySelectorAll('.floating-number').forEach(function (f) { f.remove(); });
+    setTimeout(function () {
+      activeBirds.forEach(function (b) { b.el.remove(); });
+      activeBirds.clear();
+    }, 400);
 
     totalCoins += coins;
     saveTotal();
