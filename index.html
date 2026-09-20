@@ -1,57 +1,225 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی شالیزار برنج یار</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { font-family: 'Tahoma', sans-serif; background: linear-gradient(180deg,#e8f5e9 0%,#c8e6c9 100%); margin:0; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; height:100vh; user-select:none; -webkit-user-select:none; box-sizing:border-box; }
-        .header { background:rgba(255,255,255,0.95); padding:12px 18px; border-radius:14px; box-shadow:0 6px 15px rgba(0,0,0,0.06); text-align:center; width:95%; max-width:720px; border:2px solid #a5d6a7; }
-        .coin-label{ font-size:13px; color:#555; margin-bottom:4px; } .balance{ font-size:26px; font-weight:bold; color:#2e7d32; }
-        .click-zone{ display:flex; justify-content:center; align-items:center; position:relative; width:95%; max-width:720px; height:62vh; margin:14px 0; }
-        .rice-btn{ font-size:120px; cursor:pointer; transition:transform 0.08s ease; filter:drop-shadow(0 12px 20px rgba(0,0,0,0.15)); user-select:none; -webkit-user-select:none; touch-action:manipulation; }
-        .rice-btn:active{ transform:scale(0.88); }
-        .footer{ text-align:center; color:#1b5e20; font-size:15px; font-weight:bold; background:rgba(255,255,255,0.6); padding:10px 20px; border-radius:15px; width:95%; max-width:720px; }
-        .floating-number{ position:absolute; font-size:28px; font-weight:bold; color:#fbc02d; text-shadow:1px 1px 2px rgba(0,0,0,0.25); animation:floatUp 0.8s ease-out forwards; pointer-events:none; transform-origin:center; }
-        @keyframes floatUp { 0%{ opacity:1; transform:translateY(0) scale(1); } 70%{ transform:translateY(-60px) scale(1.02); } 100%{ opacity:0; transform:translateY(-110px) scale(0.9); } }
-        .actions{ margin-top:8px; display:flex; gap:10px; justify-content:center; } .btn{ padding:8px 12px; border-radius:10px; background:#2e7d32; color:white; border:none; font-weight:bold; font-size:15px; } .btn.secondary{ background:#a5d6a7; color:#103218; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>بازی شالیزار برنج یار</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    font-family:Tahoma, system-ui, sans-serif;
+    background:linear-gradient(180deg,#e8f5e9 0%,#c8e6c9 100%);
+    margin:0;
+    padding:12px;
+    padding-top:calc(12px + env(safe-area-inset-top));
+    padding-bottom:calc(12px + env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    min-height:100vh; min-height:100dvh;
+    user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent;
+    overscroll-behavior:none;
+  }
+  .header{
+    background:rgba(255,255,255,.95); padding:12px 18px; border-radius:14px;
+    box-shadow:0 6px 15px rgba(0,0,0,.06); text-align:center;
+    width:100%; max-width:720px; border:2px solid #a5d6a7;
+  }
+  .coin-label{ font-size:13px; color:#555; margin-bottom:4px; }
+  .balance{ font-size:26px; font-weight:bold; color:#2e7d32; font-variant-numeric:tabular-nums; }
+  .click-zone{
+    display:flex; justify-content:center; align-items:center; position:relative;
+    width:100%; max-width:720px; flex:1 1 auto; min-height:0; margin:14px 0;
+  }
+  .rice-btn{
+    font-size:120px; line-height:1; background:none; border:0; padding:0; cursor:pointer;
+    transition:transform .08s ease; touch-action:manipulation;
+    filter:drop-shadow(0 12px 20px rgba(0,0,0,.15));
+  }
+  .rice-btn:active{ transform:scale(.88); }
+  .footer{
+    text-align:center; color:#1b5e20; font-size:15px; font-weight:bold;
+    background:rgba(255,255,255,.6); padding:10px 20px; border-radius:15px;
+    width:100%; max-width:720px;
+  }
+  .floating-number{
+    position:absolute; font-size:28px; font-weight:bold; color:#fbc02d;
+    text-shadow:1px 1px 2px rgba(0,0,0,.25); pointer-events:none;
+    animation:floatUp .8s ease-out forwards;
+  }
+  @keyframes floatUp{
+    0%{ opacity:1; transform:translateY(0) scale(1); }
+    70%{ transform:translateY(-60px) scale(1.02); }
+    100%{ opacity:0; transform:translateY(-110px) scale(.9); }
+  }
+  .actions{ margin-top:8px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn{
+    padding:8px 12px; border-radius:10px; background:#2e7d32; color:#fff;
+    border:0; font:inherit; font-weight:bold; font-size:15px; cursor:pointer;
+  }
+  .btn:active{ filter:brightness(.92); }
+  .btn.secondary{ background:#a5d6a7; color:#103218; }
+  @media (prefers-reduced-motion: reduce){ .floating-number{ animation-duration:.01ms; } }
+</style>
 </head>
 <body>
-    <div class="header" role="banner">
-        <div class="coin-label">موجودی برنج یار کوین (BYC)</div>
-        <div class="balance" id="coinCount">0 BYC</div>
-        <div class="actions">
-            <button class="btn secondary" id="resetBtn">بازنشانی</button>
-            <button class="btn" id="sendBtn">ثبت و ارسال به ربات</button>
-        </div>
+
+  <div class="header" role="banner">
+    <div class="coin-label">موجودی برنج یار کوین (BYC)</div>
+    <div class="balance" id="coinCount">0 BYC</div>
+    <div class="actions">
+      <button class="btn secondary" id="resetBtn" type="button">بازنشانی</button>
+      <button class="btn" id="sendBtn" type="button">ثبت و ارسال به ربات</button>
     </div>
-    <div class="click-zone" id="zone">
-        <div class="rice-btn" id="riceBtn" aria-label="شالیزار">🌾</div>
-    </div>
-    <div class="footer">روی شالیزار لمس کن و برنج یار کوین جمع کن!</div>
-    <script>
-        const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-        if (tg && tg.expand) { try { tg.expand(); } catch(e){} }
-        const STORAGE_KEY = 'bycCoins_v1'; let coins = 0;
-        const coinDisplay = document.getElementById('coinCount');
-        const riceBtn = document.getElementById('riceBtn');
-        const zone = document.getElementById('zone');
-        const sendBtn = document.getElementById('sendBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        function loadCoins(){ try{ const v = localStorage.getItem(STORAGE_KEY); if(v!==null) coins = parseInt(v)||0;}catch(e){coins=0;} updateDisplay(); }
-        function saveCoins(){ try{ localStorage.setItem(STORAGE_KEY, String(coins)); }catch(e){} }
-        function updateDisplay(){ coinDisplay.textContent = coins + " BYC"; }
-        loadCoins();
-        const MAX_FLOATS = 8;
-        function createFloating(x,y,text='+1'){ const rect = zone.getBoundingClientRect(); const fx = x - rect.left; const fy = y - rect.top; const f = document.createElement('div'); f.className='floating-number'; f.textContent=text; f.style.left=(fx-18)+'px'; f.style.top=(fy-36)+'px'; zone.appendChild(f); const floats = zone.querySelectorAll('.floating-number'); if(floats.length>MAX_FLOATS) floats[0].remove(); setTimeout(()=>{ f.remove(); },900); }
-        function onPointerEvent(clientX,clientY){ coins+=1; updateDisplay(); saveCoins(); createFloating(clientX,clientY,'+1'); }
-        riceBtn.addEventListener('pointerdown',(ev)=>{ ev.preventDefault(); onPointerEvent(ev.clientX, ev.clientY); });
-        riceBtn.addEventListener('touchstart',(ev)=>{ if(ev.touches && ev.touches.length){ const t = ev.touches[0]; ev.preventDefault(); onPointerEvent(t.clientX, t.clientY); } },{passive:false});
-        sendBtn.addEventListener('click',()=>{ if(tg && typeof tg.sendData==='function'){ const payload={type:'claim_coins',coins:coins,ts:Date.now()}; try{ tg.sendData(JSON.stringify(payload)); sendBtn.textContent='ارسال شد'; setTimeout(()=>sendBtn.textContent='ثبت و ارسال به ربات',1500); }catch(e){ alert('ارسال به ربات امکان‌پذیر نبود.'); } } else { alert('این امکان تنها داخل چت ربات در تلگرام کار می‌کند.'); } });
-        resetBtn.addEventListener('click',()=>{ if(!confirm('آیا مطمئنید موجودی پاک شود؟')) return; coins=0; saveCoins(); updateDisplay(); });
-        let lastTap = 0; riceBtn.addEventListener('click',(e)=>{ const now = Date.now(); if(now-lastTap<50){ e.preventDefault(); return; } lastTap = now; });
-    </script>
+  </div>
+
+  <div class="click-zone" id="zone">
+    <button class="rice-btn" id="riceBtn" type="button" aria-label="شالیزار">🌾</button>
+  </div>
+
+  <div class="footer">روی شالیزار لمس کن و برنج یار کوین جمع کن!</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+  if (tg) { try { tg.ready(); tg.expand(); } catch (e) {} }
+
+  const STORAGE_KEY = 'bycCoins_v1';
+
+  const coinDisplay = document.getElementById('coinCount');
+  const riceBtn     = document.getElementById('riceBtn');
+  const zone        = document.getElementById('zone');
+  const sendBtn     = document.getElementById('sendBtn');
+  const resetBtn    = document.getElementById('resetBtn');
+
+  let coins = 0;
+
+  /* ---------------- ذخیره‌سازی (با throttle) ---------------- */
+  let saveTimer = null;
+
+  function loadCoins() {
+    try {
+      const v = localStorage.getItem(STORAGE_KEY);
+      coins = v === null ? 0 : Math.max(0, parseInt(v, 10) || 0);
+    } catch (e) { coins = 0; }
+    updateDisplay();
+  }
+
+  function flushCoins() {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+    try { localStorage.setItem(STORAGE_KEY, String(coins)); } catch (e) {}
+  }
+
+  function saveCoins() {
+    if (saveTimer) return;                 // حداکثر یک بار در ۳۰۰ms
+    saveTimer = setTimeout(flushCoins, 300);
+  }
+
+  function updateDisplay() {
+    coinDisplay.textContent = coins + ' BYC';
+  }
+
+  loadCoins();
+  window.addEventListener('pagehide', flushCoins);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') flushCoins();
+  });
+
+  /* ---------------- عدد شناور ---------------- */
+  const MAX_FLOATS = 8;
+
+  function createFloating(x, y, text) {
+    const rect = zone.getBoundingClientRect();
+    const f = document.createElement('div');
+    f.className = 'floating-number';
+    f.textContent = text;
+    f.style.left = (x - rect.left - 18) + 'px';
+    f.style.top  = (y - rect.top  - 36) + 'px';
+    zone.appendChild(f);
+
+    const floats = zone.querySelectorAll('.floating-number');
+    if (floats.length > MAX_FLOATS) floats[0].remove();
+    setTimeout(function () { f.remove(); }, 850);
+  }
+
+  /* ---------------- منطق کلیک ---------------- */
+  function addCoin(x, y) {
+    coins += 1;
+    updateDisplay();
+    saveCoins();
+    createFloating(x, y, '+1');
+    try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (e) {}
+  }
+
+  let lastTime = 0;
+  function handlePoint(x, y) {
+    const now = performance.now();
+    if (now - lastTime < 30) return;   // ضد اسپم سبک
+    lastTime = now;
+    addCoin(x, y);
+  }
+
+  if ('onpointerdown' in window) {
+    // فقط یک شنونده => دیگر شمارش دوتایی نداریم
+    riceBtn.addEventListener('pointerdown', function (ev) {
+      if (ev.isPrimary === false) return;   // انگشت‌های اضافه نادیده گرفته می‌شوند
+      ev.preventDefault();
+      handlePoint(ev.clientX, ev.clientY);
+    });
+  } else {
+    riceBtn.addEventListener('touchstart', function (ev) {
+      const t = ev.changedTouches && ev.changedTouches[0];
+      if (!t) return;
+      ev.preventDefault();
+      handlePoint(t.clientX, t.clientY);
+    }, { passive: false });
+
+    riceBtn.addEventListener('mousedown', function (ev) {
+      handlePoint(ev.clientX, ev.clientY);
+    });
+  }
+
+  // پشتیبانی از کیبورد (Enter / Space)
+  riceBtn.addEventListener('click', function (ev) {
+    if (ev.detail !== 0) return;            // فقط کلیک کیبورد
+    const r = riceBtn.getBoundingClientRect();
+    handlePoint(r.left + r.width / 2, r.top + r.height / 2);
+  });
+
+  /* ---------------- ارسال به ربات ---------------- */
+  sendBtn.addEventListener('click', function () {
+    const payload = { type: 'claim_coins', coins: coins, ts: Date.now() };
+
+    if (tg && typeof tg.sendData === 'function') {
+      try {
+        tg.sendData(JSON.stringify(payload));
+        return; // تلگرام خودش مینی‌اپ را می‌بندد
+      } catch (e) { /* می‌افتیم به پیام خطا */ }
+    }
+    alert('ارسال ممکن نشد. این دکمه فقط در مینی‌اپی کار می‌کند که از دکمهٔ کیبورد یا حالت اینلاین ربات باز شده باشد.');
+  });
+
+  /* ---------------- بازنشانی ---------------- */
+  resetBtn.addEventListener('click', function () {
+    const msg = 'آیا مطمئنید موجودی پاک شود؟';
+
+    if (tg && typeof tg.showConfirm === 'function') {
+      tg.showConfirm(msg, function (ok) {
+        if (ok) doReset();
+      });
+    } else if (confirm(msg)) {
+      doReset();
+    }
+  });
+
+  function doReset() {
+    coins = 0;
+    updateDisplay();
+    flushCoins();
+  }
+})();
+</script>
 </body>
 </html>
