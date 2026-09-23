@@ -181,19 +181,44 @@
     handlePoint(r.left + r.width / 2, r.top + r.height / 2);
   });
 
+  function showMessage(msg) {
+    if (tg && typeof tg.showAlert === 'function') {
+      try { tg.showAlert(msg); return; } catch (e) {}
+    }
+    const toast = document.createElement('div');
+    toast.textContent = msg;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = 'rgba(0,0,0,0.85)';
+    toast.style.color = '#fff';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '10px';
+    toast.style.fontSize = '14px';
+    toast.style.zIndex = '9999';
+    toast.style.textAlign = 'center';
+    toast.style.maxWidth = '90%';
+    document.body.appendChild(toast);
+    setTimeout(function () { toast.remove(); }, 3500);
+  }
+
   sendBtn.addEventListener('click', function () {
     const payload = { type: 'claim_coins', coins: coins, ts: Date.now() };
     if (tg && typeof tg.sendData === 'function') {
       try { tg.sendData(JSON.stringify(payload)); return; } catch (e) {}
     }
-    alert('ارسال ممکن نشد. این دکمه فقط در مینی‌اپی کار می‌کند که از دکمهٔ کیبورد یا حالت اینلاین ربات باز شده باشد.');
+    showMessage('ارسال ممکن نشد. این دکمه فقط در مینی‌اپی کار می‌کند که از دکمهٔ کیبورد یا حالت اینلاین ربات باز شده باشد.');
   });
 
   resetBtn.addEventListener('click', function () {
     const msg = 'آیا مطمئنید موجودی پاک شود؟';
     if (tg && typeof tg.showConfirm === 'function') {
       tg.showConfirm(msg, function (ok) { if (ok) doReset(); });
-    } else if (confirm(msg)) { doReset(); }
+    } else {
+      doReset();
+      showMessage('موجودی بازنشانی شد.');
+    }
   });
 
   function doReset() {
