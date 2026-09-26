@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1B4332">
+<title>برنج یار | BeranjYar</title>
+<style>
+:root{--gold:#f4c430;--gold-dark:#e6a817;--green:#2d6a4f;--green-dark:#1b4332;--green-light:#52b788;--cream:#f1faee;--white:#ffffff;--text:#1a1a2e;--text-muted:#6c757d;--danger:#e63946;--warning:#f4a261;--shadow:0 10px 30px rgba(0,0,0,.15);--shadow-lg:0 20px 60px rgba(0,0,0,.25);--radius:18px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:#0f1626;color:var(--text);line-height:1.7;min-height:100vh;overflow-x:hidden}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.6;animation:twinkle 3s infinite}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+.landing{position:relative;z-index:1;min-height:100vh;background:linear-gradient(180deg,#0f1626 0%,#1a2a1f 40%,#2d4a2f 100%);padding-bottom:40px}
+.hero{position:relative;padding:60px 20px 80px;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(244,196,48,.25) 0%,transparent 60%);overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(244,196,48,.3) 0%,transparent 70%);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.15)}}
+.logo-box{position:relative;width:140px;height:140px;margin:0 auto 24px;filter:drop-shadow(0 10px 30px rgba(244,196,48,.4));animation:floatLogo 4s ease-in-out infinite}
+@keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.logo-box svg{width:100%;height:100%}
+.hero h1{font-size:2.4rem;color:#fff;font-weight:bold;margin-bottom:8px;text-shadow:0 4px 20px rgba(244,196,48,.4)}
+.hero h1 span{color:var(--gold)}
+.hero .tagline{font-size:1rem;color:rgba(255,255,255,.85);margin-bottom:6px}
+.hero .tagline-en{font-size:.75rem;color:var(--gold);letter-spacing:4px;font-weight:bold;margin-bottom:32px}
+.cta-group{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 auto;padding:0 20px}
+.cta-btn{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-radius:var(--radius);border:none;font-family:inherit;font-size:1rem;font-weight:bold;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .2s;box-shadow:var(--shadow)}
+.cta-btn:active{transform:scale(.97)}
+.cta-btn .btn-content{display:flex;align-items:center;gap:12px}
+.cta-btn .btn-icon{font-size:1.5rem}
+.cta-btn .btn-text{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.cta-btn .btn-text small{font-size:.7rem;font-weight:normal;opacity:.8}
+.cta-btn .btn-arrow{font-size:1.2rem;opacity:.6;transition:transform .2s}
+.cta-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--green-dark)}
+.cta-telegram{background:linear-gradient(135deg,#0088cc,#0077b5);color:#fff}
+.cta-web{background:linear-gradient(135deg,var(--green-light),var(--green));color:#fff}
+.section{max-width:900px;margin:0 auto;padding:50px 20px}
+.section-title{text-align:center;font-size:1.6rem;color:#fff;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px}
+.section-subtitle{text-align:center;font-size:.85rem;color:rgba(255,255,255,.65);margin-bottom:36px}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.feature-card{background:rgba(255,255,255,.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:24px 20px;text-align:center;transition:transform .2s,background .2s}
+.feature-card:active{transform:scale(.98)}
+.feature-card .f-icon{font-size:2.5rem;margin-bottom:12px;display:block;filter:drop-shadow(0 4px 10px rgba(244,196,48,.4))}
+.feature-card h3{font-size:1rem;color:#fff;margin-bottom:6px;font-weight:bold}
+.feature-card p{font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.6}
+.social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;max-width:700px;margin:0 auto}
+.social-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px;background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:14px;text-decoration:none;color:#fff;font-size:.8rem;font-weight:bold;transition:transform .15s,background .2s}
+.social-item:active{transform:scale(.96);background:rgba(244,196,48,.15)}
+.social-item .s-icon{font-size:2rem;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.1)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+.stat-box{background:linear-gradient(135deg,rgba(244,196,48,.15),rgba(82,183,136,.1));border:1px solid rgba(244,196,48,.3);border-radius:var(--radius);padding:20px 14px;text-align:center}
+.stat-box .st-val{font-size:1.8rem;font-weight:bold;color:var(--gold);display:block;margin-bottom:4px}
+.stat-box .st-lbl{font-size:.75rem;color:rgba(255,255,255,.7)}
+.footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,.5);font-size:.75rem;border-top:1px solid rgba(255,255,255,.08);margin-top:40px}
+.footer b{color:var(--gold)}
+.admin-link{display:inline-block;margin-top:12px;padding:6px 14px;background:rgba(255,255,255,.08);border-radius:20px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.7rem;transition:background .2s}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.login-card{background:linear-gradient(135deg,#1e2a3e,#16213e);border:1px solid rgba(244,196,48,.4);border-radius:20px;padding:32px 24px;max-width:380px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
+.login-card .lock-icon{font-size:3rem;margin-bottom:12px}
+.login-card h2{color:var(--gold);font-size:1.2rem;margin-bottom:6px}
+.login-card p{color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:24px}
+.login-input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.3);color:#fff;font-family:inherit;font-size:.95rem;text-align:center;letter-spacing:3px;margin-bottom:16px}
+.login-input:focus{outline:none;border-color:var(--gold)}
+.login-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--green-dark);font-weight:bold;font-size:.95rem;cursor:pointer;font-family:inherit}
+.login-btn:active{transform:scale(.97)}
+.login-err{color:var(--danger);font-size:.75rem;margin-top:10px;min-height:20px}
+.admin-panel{display:none;min-height:100vh;background:linear-gradient(180deg,#0a0f1a 0%,#1a2a1f 100%);padding:20px 12px 80px;position:relative;z-index:5}
+.admin-panel.show{display:block}
+.admin-header{max-width:800px;margin:0 auto 20px;background:linear-gradient(135deg,var(--green),var(--green-dark));border:1px solid rgba(244,196,48,.35);border-radius:18px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.admin-header .a-brand{display:flex;align-items:center;gap:12px;color:#fff}
+.admin-header .a-brand .a-icon{font-size:1.8rem}
+.admin-header .a-brand h2{font-size:1rem;font-weight:bold}
+.admin-header .a-brand small{font-size:.65rem;color:var(--gold);letter-spacing:2px}
+.admin-header .logout-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:8px 14px;border-radius:10px;font-family:inherit;font-size:.8rem;font-weight:bold;cursor:pointer}
+.admin-nav{max-width:800px;margin:0 auto 20px;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.admin-nav::-webkit-scrollbar{display:none}
+.admin-nav-btn{padding:10px 16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);border-radius:12px;font-family:inherit;font-size:.8rem;font-weight:bold;cursor:pointer;white-space:nowrap;transition:all .2s}
+.admin-nav-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--green-dark);border-color:var(--gold)}
+.admin-content{max-width:800px;margin:0 auto}
+.admin-tab{display:none}
+.admin-tab.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.admin-card{background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin-bottom:14px}
+.admin-card h3{color:var(--gold);font-size:.95rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:14px}
+.stat-mini{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 12px;text-align:center}
+.stat-mini .sm-val{font-size:1.6rem;font-weight:bold;color:var(--gold);display:block;margin-bottom:4px}
+.stat-mini .sm-lbl{font-size:.7rem;color:rgba(255,255,255,.6)}
+.stat-mini.green .sm-val{color:var(--green-light)}
+.stat-mini.red .sm-val{color:var(--danger)}
+.stat-mini.orange .sm-val{color:var(--warning)}
+.prog-line{margin:8px 0}
+.prog-line .pl-head{display:flex;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.7);margin-bottom:6px}
+.prog-line .pl-bar{height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden}
+.prog-line .pl-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green-light));border-radius:4px;transition:width .5s}
+.log-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,.2);border-radius:10px;margin-bottom:6px;font-size:.78rem;color:rgba(255,255,255,.8)}
+.log-item .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.log-item .log-dot.ok{background:var(--green-light)}
+.log-item .log-dot.warn{background:var(--warning)}
+.log-item .log-dot.err{background:var(--danger)}
+.log-item .log-time{margin-right:auto;font-size:.68rem;color:rgba(255,255,255,.4)}
+.link-edit{display:flex;gap:8px;margin-bottom:10px;align-items:center}
+.link-edit label{font-size:.75rem;color:rgba(255,255,255,.7);min-width:90px}
+.link-edit input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.3);color:#fff;font-family:inherit;font-size:.8rem;direction:ltr;text-align:left}
+.link-edit input:focus{outline:none;border-color:var(--gold)}
+.save-btn{padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--green-dark);font-weight:bold;font-size:.85rem;cursor:pointer;font-family:inherit;width:100%;margin-top:8px}
+.save-btn:active{transform:scale(.97)}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--green-dark);padding:12px 22px;border-radius:14px;font-size:.82rem;font-weight:bold;box-shadow:0 10px 30px rgba(244,196,48,.5);opacity:0;transition:all .3s;z-index:2000;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:480px){.hero h1{font-size:1.8rem}.section-title{font-size:1.3rem}.logo-box{width:110px;height:110px}.stat-box .st-val{font-size:1.5rem}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="landing" id="landingPage">
+<div class="hero">
+<div class="logo-box">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffe082"/><stop offset="50%" stop-color="#f4c430"/><stop offset="100%" stop-color="#e6a817"/></linearGradient>
+<linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#52b788"/><stop offset="50%" stop-color="#2d6a4f"/><stop offset="100%" stop-color="#1b4332"/></linearGradient>
+</defs>
+<circle cx="100" cy="100" r="92" fill="none" stroke="url(#gr)" stroke-width="3" opacity="0.5"/>
+<circle cx="100" cy="100" r="80" fill="none" stroke="url(#gg)" stroke-width="1.5" stroke-dasharray="6,4"/>
+<g transform="translate(100, 85)">
+<path d="M 0 25 C -45 18 -55 -25 -35 -50 C -22 -62 0 -58 0 -42 C 0 -58 22 -62 35 -50 C 55 -25 45 18 0 25 Z" fill="url(#gr)"/>
+<path d="M 0 20 L 0 -38" stroke="#1b4332" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+<g transform="translate(0, -55)">
+<ellipse cx="0" cy="-22" rx="6" ry="12" fill="url(#gg)"/>
+<ellipse cx="-11" cy="-15" rx="5" ry="10" fill="url(#gg)" transform="rotate(-25 -11 -15)"/>
+<ellipse cx="11" cy="-15" rx="5" ry="10" fill="url(#gg)" transform="rotate(25 11 -15)"/>
+<ellipse cx="-15" cy="-3" rx="5" ry="10" fill="url(#gg)" transform="rotate(-45 -15 -3)"/>
+<ellipse cx="15" cy="-3" rx="5" ry="10" fill="url(#gg)" transform="rotate(45 15 -3)"/>
+</g>
+</g>
+</svg>
+</div>
+<h1>🌾 <span>برنج یار</span> 🌾</h1>
+<div class="tagline">دستیار هوشمند شالیکاران</div>
+<div class="tagline-en">BERANJYAR</div>
+</div>
+<div class="cta-group">
+<a href="#" class="cta-btn cta-primary" id="downloadApkBtn">
+<div class="btn-content"><span class="btn-icon">📱</span><div class="btn-text"><span>دانلود اپلیکیشن موبایل</span><small>نسخه اندروید - APK</small></div></div>
+<span class="btn-arrow">◀</span>
+</a>
+<a href="https://drzobi.github.io/Game-BeranjYar-/scarecrow.html" class="cta-btn cta-web" id="playWebBtn">
+<div class="btn-content"><span class="btn-icon">🎮</span><div class="btn-text"><span>ورود به بازی</span><small>نسخه وب - بدون نصب</small></div></div>
+<span class="btn-arrow">◀</span>
+</a>
+<a href="https://t.me/berenjyarbot" class="cta-btn cta-telegram" target="_blank">
+<div class="btn-content"><span class="btn-icon">🤖</span><div class="btn-text"><span>ربات تلگرام</span><small>@berenjyarbot</small></div></div>
+<span class="btn-arrow">◀</span>
+</a>
+</div><div class="section">
+<h2 class="section-title">✨ امکانات برنج یار</h2>
+<p class="section-subtitle">همراه هوشمند شما در تمام مراحل کشت برنج</p>
+<div class="features">
+<div class="feature-card"><span class="f-icon">🌾</span><h3>شالیزار هوشمند</h3><p>مدیریت مراحل کشت، آبیاری و برداشت</p></div>
+<div class="feature-card"><span class="f-icon">🎯</span><h3>بازی مترسک</h3><p>بازی سرگرم‌کننده با پرنده‌ها و کسب سکه</p></div>
+<div class="feature-card"><span class="f-icon">🔍</span><h3>تشخیص آفت</h3><p>اسکن هوشمند برگ و ساقه برنج</p></div>
+<div class="feature-card"><span class="f-icon">🛒</span><h3>بازارچه برنج</h3><p>خرید و فروش محصول و تجهیزات</p></div>
+<div class="feature-card"><span class="f-icon">📅</span><h3>تقویم کشاورزی</h3><p>یادآوری زمان کاشت و برداشت</p></div>
+<div class="feature-card"><span class="f-icon">🤝</span><h3>بنیاد مهربانی</h3><p>کمک به کشاورزان کم‌بضاعت</p></div>
+</div>
+</div>
+<div class="section">
+<h2 class="section-title">🌐 ما را دنبال کنید</h2>
+<p class="section-subtitle">در شبکه‌های اجتماعی با ما در ارتباط باشید</p>
+<div class="social-grid">
+<a href="https://t.me/berenjyarbot" class="social-item" target="_blank"><span class="s-icon" style="background:linear-gradient(135deg,#0088cc,#0077b5)">✈️</span><span>ربات تلگرام</span></a>
+<a href="#" class="social-item" data-social="telegram-channel" target="_blank"><span class="s-icon" style="background:linear-gradient(135deg,#0088cc,#005c8e)">📢</span><span>کانال تلگرام</span></a>
+<a href="#" class="social-item" data-social="instagram" target="_blank"><span class="s-icon" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">📸</span><span>اینستاگرام</span></a>
+<a href="#" class="social-item" data-social="x" target="_blank"><span class="s-icon" style="background:#000">𝕏</span><span>ایکس</span></a>
+<a href="#" class="social-item" data-social="youtube" target="_blank"><span class="s-icon" style="background:linear-gradient(135deg,#ff0000,#cc0000)">▶️</span><span>یوتیوب</span></a>
+<a href="#" class="social-item" data-social="website" target="_blank"><span class="s-icon" style="background:linear-gradient(135deg,#2d6a4f,#52b788)">🌐</span><span>وب‌سایت</span></a>
+</div>
+</div>
+<div class="section">
+<h2 class="section-title">📊 آمار برنج یار</h2>
+<p class="section-subtitle">پلتفرم در یک نگاه</p>
+<div class="stats-grid">
+<div class="stat-box"><span class="st-val" id="publicUsers">+۱٬۲۴۰</span><span class="st-lbl">کاربر فعال</span></div>
+<div class="stat-box"><span class="st-val" id="publicGames">+۸٬۵۰۰</span><span class="st-lbl">بازی انجام شده</span></div>
+<div class="stat-box"><span class="st-val" id="publicCoins">+۲۵۰K</span><span class="st-lbl">سکه کسب شده</span></div>
+<div class="stat-box"><span class="st-val" id="publicRice">+۱۲٬۰۰۰</span><span class="st-lbl">کیلو برنج</span></div>
+</div>
+</div>
+<div class="footer">
+<div>ساخته شده با 💚 برای کشاورزان ایران</div>
+<div style="margin-top:6px"><b>BeranjYar</b> © 2026</div>
+<a href="#" class="admin-link" id="adminLink">🔒 ورود به پنل مدیریت</a>
+</div>
+</div>
+<div class="admin-panel" id="adminPanel">
+<div class="admin-header">
+<div class="a-brand"><span class="a-icon">🛡️</span><div><h2>پنل مدیریت</h2><small>ADMIN PANEL</small></div></div>
+<button class="logout-btn" onclick="logout()" type="button">🚪 خروج</button>
+</div>
+<div class="admin-nav">
+<button class="admin-nav-btn active" onclick="switchAdminTab('dashboard',this)" type="button">📊 داشبورد</button>
+<button class="admin-nav-btn" onclick="switchAdminTab('users',this)" type="button">👥 کاربران</button>
+<button class="admin-nav-btn" onclick="switchAdminTab('links',this)" type="button">🔗 لینک‌ها</button>
+<button class="admin-nav-btn" onclick="switchAdminTab('logs',this)" type="button">📋 لاگ‌ها</button>
+<button class="admin-nav-btn" onclick="switchAdminTab('security',this)" type="button">🔒 امنیت</button>
+</div>
+<div class="admin-content">
+<div class="admin-tab active" id="atab-dashboard">
+<div class="stat-row">
+<div class="stat-mini"><span class="sm-val" id="admUsers">1240</span><span class="sm-lbl">👥 کاربران</span></div>
+<div class="stat-mini green"><span class="sm-val" id="admOnline">87</span><span class="sm-lbl">🟢 آنلاین</span></div>
+<div class="stat-mini"><span class="sm-val" id="admGames">8500</span><span class="sm-lbl">🎮 بازی‌ها</span></div>
+<div class="stat-mini orange"><span class="sm-val" id="admErrors">23</span><span class="sm-lbl">⚠️ خطا</span></div>
+</div>
+<div class="admin-card">
+<h3>📈 عملکرد سیستم</h3>
+<div class="prog-line"><div class="pl-head"><span>پایداری سرور</span><span>99.7%</span></div><div class="pl-bar"><div class="pl-fill" style="width:99.7%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>سرعت پاسخ</span><span>245ms</span></div><div class="pl-bar"><div class="pl-fill" style="width:82%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>نرخ موفقیت بازی</span><span>96.4%</span></div><div class="pl-bar"><div class="pl-fill" style="width:96%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>امنیت</span><span>100%</span></div><div class="pl-bar"><div class="pl-fill" style="width:100%"></div></div></div>
+</div>
+<div class="admin-card">
+<h3>📊 فعالیت امروز</h3>
+<div class="stat-row">
+<div class="stat-mini green"><span class="sm-val">412</span><span class="sm-lbl">ورود جدید</span></div>
+<div class="stat-mini"><span class="sm-val">1876</span><span class="sm-lbl">بازی انجام شده</span></div>
+<div class="stat-mini orange"><span class="sm-val">3</span><span class="sm-lbl">کرش ثبت شده</span></div>
+</div>
+</div>
+</div>
+<div class="admin-tab" id="atab-users">
+<div class="admin-card">
+<h3>👥 مدیریت کاربران</h3>
+<div class="stat-row">
+<div class="stat-mini"><span class="sm-val">1240</span><span class="sm-lbl">کل کاربران</span></div>
+<div class="stat-mini green"><span class="sm-val">1187</span><span class="sm-lbl">فعال</span></div>
+<div class="stat-mini red"><span class="sm-val">53</span><span class="sm-lbl">مسدود</span></div>
+</div>
+<div style="margin-top:14px;color:rgba(255,255,255,.7);font-size:.8rem;line-height:1.8">
+<div class="log-item"><span class="log-dot ok"></span>کاربر جدید: @ali_rice<span class="log-time">۵ دقیقه پیش</span></div>
+<div class="log-item"><span class="log-dot ok"></span>کاربر جدید: @sara_farm<span class="log-time">۱۲ دقیقه پیش</span></div>
+<div class="log-item"><span class="log-dot warn"></span>تلاش مشکوک از IP نامعتبر<span class="log-time">۲۵ دقیقه پیش</span></div>
+<div class="log-item"><span class="log-dot ok"></span>کاربر جدید: @mazandaran_king<span class="log-time">۱ ساعت پیش</span></div>
+</div>
+</div>
+</div>
+<div class="admin-tab" id="atab-links">
+<div class="admin-card">
+<h3>🔗 مدیریت لینک‌ها</h3>
+<p style="font-size:.78rem;color:rgba(255,255,255,.6);margin-bottom:16px">لینک‌های شبکه‌های اجتماعی و APK رو اینجا مدیریت کن:</p>
+<div class="link-edit"><label>📱 APK</label><input type="text" id="linkApk" placeholder="https://..." value=""></div>
+<div class="link-edit"><label>📢 کانال TG</label><input type="text" id="linkTelegramChannel" placeholder="https://t.me/..." value=""></div>
+<div class="link-edit"><label>📸 اینستاگرام</label><input type="text" id="linkInstagram" placeholder="https://instagram.com/..." value=""></div>
+<div class="link-edit"><label>𝕏 ایکس</label><input type="text" id="linkX" placeholder="https://x.com/..." value=""></div>
+<div class="link-edit"><label>▶️ یوتیوب</label><input type="text" id="linkYoutube" placeholder="https://youtube.com/..." value=""></div>
+<div class="link-edit"><label>🌐 سایت</label><input type="text" id="linkWebsite" placeholder="https://..." value=""></div>
+<button class="save-btn" onclick="saveLinks()" type="button">💾 ذخیره تغییرات</button>
+</div>
+</div>
+<div class="admin-tab" id="atab-logs">
+<div class="admin-card">
+<h3>📋 لاگ سیستم</h3>
+<div class="log-item"><span class="log-dot ok"></span>سرور به‌روزرسانی شد v1.2.5<span class="log-time">۲ دقیقه پیش</span></div>
+<div class="log-item"><span class="log-dot err"></span>خطای بارگذاری تصویر کاربر #4523<span class="log-time">۱۵ دقیقه پیش</span></div>
+<div class="log-item"><span class="log-dot ok"></span>پشتیبان‌گیری خودکار انجام شد<span class="log-time">۱ ساعت پیش</span></div>
+<div class="log-item"><span class="log-dot warn"></span>تلاش ورود ناموفق به پنل<span class="log-time">۲ ساعت پیش</span></div>
+<div class="log-item"><span class="log-dot ok"></span>۱٬۲۴۰ کاربر فعال در ۲۴ ساعت<span class="log-time">۳ ساعت پیش</span></div>
+<div class="log-item"><span class="log-dot err"></span>کرش در بازی مترسک<span class="log-time">۵ ساعت پیش</span></div>
+</div>
+</div>
+<div class="admin-tab" id="atab-security">
+<div class="admin-card">
+<h3>🔒 وضعیت امنیت</h3>
+<div class="prog-line"><div class="pl-head"><span>SSL / HTTPS</span><span style="color:var(--green-light)">✅ فعال</span></div><div class="pl-bar"><div class="pl-fill" style="width:100%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>احراز هویت دو مرحله‌ای</span><span style="color:var(--warning)">⚠️ غیرفعال</span></div><div class="pl-bar"><div class="pl-fill" style="width:0%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>Firewall</span><span style="color:var(--green-light)">✅ فعال</span></div><div class="pl-bar"><div class="pl-fill" style="width:100%"></div></div></div>
+<div class="prog-line"><div class="pl-head"><span>پشتیبان‌گیری</span><span style="color:var(--green-light)">✅ روزانه</span></div><div class="pl-bar"><div class="pl-fill" style="width:100%"></div></div></div>
+</div>
+<div class="admin-card">
+<h3>⚠️ هشدارهای امنیتی</h3>
+<div class="log-item"><span class="log-dot warn"></span>تلاش ورود مشکوک از IP: 185.xx.xx.xx<span class="log-time">۲ ساعت پیش</span></div>
+<div class="log-item"><span class="log-dot ok"></span>رمز عبور ۳۰ روز پیش تغییر کرد<span class="log-time">۳۰ روز پیش</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="modal-bg" id="loginModal">
+<div class="login-card">
+<div class="lock-icon">🔒</div>
+<h2>ورود به پنل مدیریت</h2>
+<p>فقط مدیر سیستم می‌تواند وارد شود</p>
+<input type="password" class="login-input" id="passwordInput" placeholder="••••••••" autocomplete="off">
+<button class="login-btn" onclick="tryLogin()" type="button">ورود</button>
+<div class="login-err" id="loginErr"></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+'use strict';
+function makeStars(){var box=document.getElementById('stars');for(var i=0;i<60;i++){var s=document.createElement('div');s.className='star';s.style.left=(Math.random()*100)+'%';s.style.top=(Math.random()*100)+'%';s.style.animationDelay=(Math.random()*3)+'s';box.appendChild(s);}}
+makeStars();
+var toastTimer;
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2500);}
+var ADMIN_PASSWORD='BeranjYar@2026';
+var loginModal=document.getElementById('loginModal');
+var landingPage=document.getElementById('landingPage');
+var adminPanel=document.getElementById('adminPanel');
+function tryLogin(){var pwd=document.getElementById('passwordInput').value;var err=document.getElementById('loginErr');if(pwd===ADMIN_PASSWORD){loginModal.classList.remove('show');landingPage.style.display='none';adminPanel.classList.add('show');toast('✅ به پنل مدیریت خوش آمدید');window.scrollTo(0,0);}else{err.textContent='❌ رمز عبور اشتباه است';document.getElementById('passwordInput').value='';}}
+function logout(){adminPanel.classList.remove('show');landingPage.style.display='block';window.scrollTo(0,0);toast('👋 خارج شدید');}
+document.getElementById('passwordInput').addEventListener('keypress',function(e){if(e.key==='Enter')tryLogin();});
+document.getElementById('adminLink').addEventListener('click',function(e){e.preventDefault();loginModal.classList.add('show');document.getElementById('passwordInput').value='';document.getElementById('loginErr').textContent='';setTimeout(function(){document.getElementById('passwordInput').focus();},200);});
+function switchAdminTab(tab,btn){document.querySelectorAll('.admin-tab').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.admin-nav-btn').forEach(function(el){el.classList.remove('active');});var target=document.getElementById('atab-'+tab);if(target)target.classList.add('active');if(btn)btn.classList.add('active');}
+var LINKS_KEY='beranjyar_links_v1';
+function loadLinks(){var defaults={apk:'',telegramChannel:'',instagram:'',x:'',youtube:'',website:''};var data=defaults;try{var saved=localStorage.getItem(LINKS_KEY);if(saved)data=Object.assign({},defaults,JSON.parse(saved));}catch(e){}return data;}
+function saveLinks(){var data={apk:document.getElementById('linkApk').value.trim(),telegramChannel:document.getElementById('linkTelegramChannel').value.trim(),instagram:document.getElementById('linkInstagram').value.trim(),x:document.getElementById('linkX').value.trim(),youtube:document.getElementById('linkYoutube').value.trim(),website:document.getElementById('linkWebsite').value.trim()};try{localStorage.setItem(LINKS_KEY,JSON.stringify(data));applyLinks(data);toast('✅ لینک‌ها ذخیره شد');}catch(e){toast('❌ خطا در ذخیره');}}
+function applyLinks(data){var map={'telegram-channel':data.telegramChannel,'instagram':data.instagram,'x':data.x,'youtube':data.youtube,'website':data.website};document.querySelectorAll('[data-social]').forEach(function(el){var key=el.getAttribute('data-social');if(map[key])el.href=map[key];else el.href='#';});var apkBtn=document.getElementById('downloadApkBtn');if(data.apk)apkBtn.href=data.apk;else apkBtn.href='#';}
+function populateLinkInputs(data){document.getElementById('linkApk').value=data.apk||'';document.getElementById('linkTelegramChannel').value=data.telegramChannel||'';document.getElementById('linkInstagram').value=data.instagram||'';document.getElementById('linkX').value=data.x||'';document.getElementById('linkYoutube').value=data.youtube||'';document.getElementById('linkWebsite').value=data.website||'';}
+var linksData=loadLinks();
+applyLinks(linksData);
+populateLinkInputs(linksData);
+window.tryLogin=tryLogin;
+window.logout=logout;
+window.switchAdminTab=switchAdminTab;
+window.saveLinks=saveLinks;
+document.getElementById('downloadApkBtn').addEventListener('click',function(e){if(!linksData.apk){e.preventDefault();toast('📱 به‌زودی نسخه اندروید منتشر می‌شود');}});
+document.querySelectorAll('[data-social]').forEach(function(el){el.addEventListener('click',function(e){if(el.href==='#'||!el.href||el.getAttribute('href')==='#'){e.preventDefault();toast('🔗 این لینک به‌زودی اضافه می‌شود');}});});
+})();
+</script>
+</body>
+</html>
