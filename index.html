@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>برنج‌یار | BeranjYar</title>
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
   <style>
@@ -15,271 +15,264 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #153e26 0%, #0a1f13 60%, #040d08 100%);
+      background-color: #0f172a;
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
       color: #ffffff;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px 16px;
-      overflow-x: hidden;
+      padding: 24px 16px;
     }
 
-    .app-card {
+    .container {
       width: 100%;
-      max-width: 410px;
-      background: rgba(16, 43, 27, 0.75);
-      border: 1px solid rgba(74, 222, 128, 0.25);
-      border-radius: 32px;
-      padding: 36px 24px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(34, 197, 94, 0.15);
-      backdrop-filter: blur(16px);
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
-      position: relative;
     }
 
-    .badge {
-      display: inline-block;
-      background: rgba(34, 197, 94, 0.12);
-      color: #4ade80;
-      padding: 6px 16px;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
+    /* مدار و دایره چرخان انیمیشنی */
+    .radar-wrapper {
+      position: relative;
+      width: 150px;
+      height: 150px;
       margin-bottom: 24px;
-      border: 1px solid rgba(74, 222, 128, 0.35);
-      letter-spacing: 0.5px;
-    }
-
-    /* --- بخش انیمیشن دایره و نقاط چرخان --- */
-    .orbit-container {
-      position: relative;
-      width: 130px;
-      height: 130px;
-      margin: 0 auto 20px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* مدار بیرونی چرخان اول با نقاط */
-    .orbit-ring {
+    .orbit {
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 1.5px dashed rgba(74, 222, 128, 0.45);
-      animation: rotateRing 14s linear infinite;
+      border: 2px dashed #f59e0b;
+      animation: spin 16s linear infinite;
     }
 
-    /* مدار دوم معکوس با نقطه شتاب‌دار */
-    .orbit-ring-inner {
+    .orbit-dot {
       position: absolute;
-      width: 106px;
-      height: 106px;
+      top: -6px;
+      left: calc(50% - 6px);
+      width: 12px;
+      height: 12px;
+      background-color: #facc15;
       border-radius: 50%;
-      border: 1px solid rgba(134, 239, 172, 0.2);
-      animation: rotateRingReverse 9s linear infinite;
+      box-shadow: 0 0 12px #facc15, 0 0 20px #eab308;
     }
 
-    /* نقاط متصل روی مدار چرخان */
-    .orbit-ring::before, .orbit-ring::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #4ade80;
-      border-radius: 50%;
-      box-shadow: 0 0 12px #22c55e, 0 0 20px #4ade80;
-    }
-    .orbit-ring::before {
-      top: -5px;
-      left: calc(50% - 5px);
-    }
-    .orbit-ring::after {
-      bottom: -5px;
-      left: calc(50% - 5px);
-      width: 7px;
-      height: 7px;
-      background: #facc15;
-      box-shadow: 0 0 10px #facc15;
-    }
-
-    .orbit-ring-inner::before {
-      content: '';
-      position: absolute;
-      top: calc(50% - 4px);
-      left: -4px;
-      width: 8px;
-      height: 8px;
-      background: #67e8f9;
-      border-radius: 50%;
-      box-shadow: 0 0 12px #38bdf8;
-    }
-
-    @keyframes rotateRing {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes rotateRingReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
-
-    /* هسته مرکزی دایره */
-    .logo-core {
-      width: 74px;
-      height: 74px;
-      background: radial-gradient(circle, #22c55e 0%, #15803d 85%);
+    .logo-center {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #059669, #047857);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 25px rgba(34, 197, 94, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 25px rgba(5, 150, 105, 0.4);
       z-index: 2;
     }
 
-    .logo-core svg {
-      width: 40px;
-      height: 40px;
-      fill: #ffffff;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    .logo-center svg {
+      width: 52px;
+      height: 52px;
+      fill: #fef08a;
     }
 
-    /* --- عنوان و متن --- */
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
     }
 
-    .slogan {
-      font-size: 0.9rem;
-      color: #a7f3d0;
-      line-height: 1.7;
-      margin-bottom: 30px;
-      font-weight: 400;
-    }
-
-    /* --- دکمه‌های کنشی --- */
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-    }
-
-    .btn {
+    /* عنوان سامانه */
+    .brand-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fbbf24;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 15px 18px;
-      border-radius: 18px;
-      font-size: 0.98rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-      border: none;
+      gap: 8px;
+      margin-bottom: 6px;
     }
 
-    .btn:active {
+    .brand-subtitle {
+      font-size: 1.05rem;
+      color: #e2e8f0;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .brand-en {
+      font-size: 0.85rem;
+      color: #fbbf24;
+      letter-spacing: 4px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+
+    /* لیست دکمه‌ها */
+    .button-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: transform 0.15s ease, filter 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-card:active {
       transform: scale(0.97);
     }
 
-    .btn-download {
-      background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-      color: #1a1a1a;
-      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.35);
+    .btn-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: right;
     }
 
-    .btn-game {
-      background: rgba(30, 77, 48, 0.8);
-      color: #e2e8f0;
-      border: 1px solid rgba(74, 222, 128, 0.35);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    .btn-icon {
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .btn-telegram {
-      background: linear-gradient(135deg, #2aabee 0%, #229ed9 100%);
+    .btn-texts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btn-main-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .btn-sub-text {
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .arrow-icon {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    /* رنگ‌بندی دقیق دکمه‌ها بر اساس طرح اولیه */
+    .btn-orange {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
       color: #ffffff;
-      box-shadow: 0 8px 20px rgba(34, 158, 217, 0.35);
+      box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35);
     }
 
-    .btn svg {
-      width: 22px;
-      height: 22px;
+    .btn-green {
+      background: linear-gradient(90deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.35);
+    }
+
+    .btn-blue {
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
     }
 
     .footer {
-      margin-top: 26px;
-      font-size: 0.76rem;
-      color: #86efac;
-      opacity: 0.85;
-      line-height: 1.6;
-      border-top: 1px solid rgba(74, 222, 128, 0.15);
-      padding-top: 16px;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
-  <div class="app-card">
-    <div class="badge">سامانه خردورز شالیکاری ایران</div>
+  <div class="container">
     
-    <!-- دایره و نقاط چرخان انیمیشنی دور لوگو -->
-    <div class="orbit-container">
-      <div class="orbit-ring"></div>
-      <div class="orbit-ring-inner"></div>
-      <div class="logo-core">
-        <!-- آیکون دانه برنج و جوانه سبز -->
+    <!-- دایره و مدار انیمیشنی چرخان به همراه لوگو در مرکز -->
+    <div class="radar-wrapper">
+      <div class="orbit">
+        <div class="orbit-dot"></div>
+      </div>
+      <div class="logo-center">
+        <!-- نماد خوشه برنج طلایی -->
         <svg viewBox="0 0 24 24">
           <path d="M12 2C9.5 5 7 8.5 7 12.5C7 16 9.5 19 12 21C14.5 19 17 16 17 12.5C17 8.5 14.5 5 12 2ZM12 18.5C10.5 17 8.8 14.8 8.8 12.5C8.8 9.8 10.7 7 12 4.8C13.3 7 15.2 9.8 15.2 12.5C15.2 14.8 13.5 17 12 18.5Z"/>
-          <path d="M12 6C11.5 8 10 10.5 10 12.5C10 14 11 15.2 12 16C13 15.2 14 14 14 12.5C14 10.5 12.5 8 12 6Z" fill="#a7f3d0"/>
         </svg>
       </div>
     </div>
 
-    <h1>برنج‌یار</h1>
-    <p class="slogan">
-      به رنج، برنج آید به بار<br>
-      نی ز سر گوید که از علم برآرد برنج‌یار
-    </p>
+    <!-- عنوان و هویت برنج‌یار -->
+    <div class="brand-title">
+      <span>🌾</span>
+      <span>برنج یار</span>
+      <span>🌾</span>
+    </div>
+    <div class="brand-subtitle">دستیار هوشمند شالیکاران</div>
+    <div class="brand-en">BERANJYAR</div>
 
-    <div class="actions">
-      <!-- دانلود مستقیم فایل APK نصبی -->
-      <a href="beranjyar.apk" download class="btn btn-download">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M5 20h14v-2H5v2zM12 4v9.17l3.59-3.59L17 11l-5 5-5-5 1.41-1.42L11 13.17V4h1z"/>
-        </svg>
-        <span>دانلود اپلیکیشن نصبی (APK اندروید)</span>
+    <!-- دکمه‌های ۳ گانه بدون تداخل و بدون کادر سیاه -->
+    <div class="button-group">
+      
+      <!-- دکمه اول: دانلود اپلیکیشن -->
+      <a href="beranjyar.apk" download class="btn-card btn-orange">
+        <div class="btn-content">
+          <div class="btn-icon">📱</div>
+          <div class="btn-texts">
+            <span class="btn-main-text">دانلود اپلیکیشن شالیکار</span>
+            <span class="btn-sub-text">نسخه اندروید - فایل نصبی APK</span>
+          </div>
+        </div>
+        <div class="arrow-icon">◀</div>
       </a>
 
-      <!-- دکمه ورود به بازی شبیه‌ساز کشاورزی -->
-      <a href="#" class="btn btn-game" onclick="alert('شبیه‌ساز و بازی شالیکاری برنج‌یار در حال بروزرسانی است.'); return false;">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-        </svg>
-        <span>ورود به بازی و شبیه‌ساز شالیکاری</span>
+      <!-- دکمه دوم: نسخه وب و بازی -->
+      <a href="#" class="btn-card btn-green" onclick="alert('نسخه وب‌اپلیکیشن به زودی فعال خواهد شد.'); return false;">
+        <div class="btn-content">
+          <div class="btn-icon">🎮</div>
+          <div class="btn-texts">
+            <span class="btn-main-text">ورود به شبیه‌ساز مزرعه</span>
+            <span class="btn-sub-text">نسخه وب - بدون نیاز به نصب</span>
+          </div>
+        </div>
+        <div class="arrow-icon">◀</div>
       </a>
 
-      <!-- دکمه تلگرام -->
-      <a href="https://t.me/" target="_blank" class="btn btn-telegram">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-        </svg>
-        <span>عضویت در کانال و ربات تلگرام</span>
+      <!-- دکمه سوم: تلگرام -->
+      <a href="https://t.me/beranjyarbot" target="_blank" class="btn-card btn-blue">
+        <div class="btn-content">
+          <div class="btn-icon">🤖</div>
+          <div class="btn-texts">
+            <span class="btn-main-text">ربات و کانال تلگرام</span>
+            <span class="btn-sub-text">@beranjyarbot</span>
+          </div>
+        </div>
+        <div class="arrow-icon">◀</div>
       </a>
+
     </div>
 
     <div class="footer">
-      سامانه پایش هوشمند شالیزارهای مازندران<br>
-      بابلسر و فریدونکنار
+      © سامانه هوشمند برنج‌یار - مازندران
     </div>
+
   </div>
 
 </body>
