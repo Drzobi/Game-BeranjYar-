@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>برنج یار | BeranjYar</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: #0f172a;
+            background: radial-gradient(circle at top, #1e293b, #0f172a);
+            color: #fff;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /* استایل پیام خوش‌آمدگویی */
+        .welcome-section {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .welcome-section h1 {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        .welcome-section h2 {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: normal;
+        }
+        /* استایل بخش انیمیشن و میکروفن */
+        .animation-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .scarecrow-img {
+            font-size: 3rem;
+            display: inline-block;
+            animation: sway 3s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        .wind-effect {
+            font-size: 1.5rem;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            animation: blow 2s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes blow {
+            0% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(10px); opacity: 1; }
+            100% { transform: translateX(0); opacity: 0.5; }
+        }
+        .voice-text {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+        .mic-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        /* استایل لیست خدمات */
+        .services-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .services-container h3 {
+            color: #10b981;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+            padding-bottom: 5px;
+        }
+        .service-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+        .service-list li {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+        .service-list li:last-child {
+            border-bottom: none;
+        }
+        /* استایل دکمه‌های اصلی */
+        .btn-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.2s;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-card:active { transform: scale(0.98); }
+        .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .btn-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .btn-content { display: flex; align-items: center; gap: 15px; }
+        .btn-icon { font-size: 1.8rem; }
+        .btn-texts { display: flex; flex-direction: column; }
+        .btn-main-text { font-size: 1.1rem; font-weight: bold; }
+        .btn-sub-text { font-size: 0.8rem; opacity: 0.8; }
+        .arrow-icon { font-size: 1.2rem; opacity: 0.7; }
+        .footer { text-align: center; color: #64748b; font-size: 0.8rem; margin-top: auto; padding-top: 20px; }
+    </style>
+</head><body>
+
+    <!-- بخش پیام خوش‌آمدگویی -->
+    <div class="welcome-section">
+        <h1>به سامانه برنج یار خوش آمدید</h1>
+        <h2>Welcome to BeranjYar System</h2>
+    </div>
+
+    <!-- بخش انیمیشن و میکروفن -->
+    <div class="animation-container">
+        <div class="wind-effect">🍃</div>
+        <div class="scarecrow-img">🌾👒</div>
+        <p class="voice-text">اگر درخواستی دارید، می‌توانید با فعال نمودن میکروفن، با مترسک برنج یار صحبت کنید تا هرگونه خواسته در زمینه شالی‌کاری و دریافت پیام‌تان ثبت شود.</p>
+        <button class="mic-btn" onclick="window.location.href='https://t.me/berenjyar_bot'">
+            🎤 فعال‌سازی میکروفن
+        </button>
+    </div>
+
+    <!-- بخش لیست خدمات -->
+    <div class="services-container">
+        <h3>۱. چشم بینا و هوش مترسک برنج یار</h3>
+        <ul class="service-list">
+            <li>الف. شالی برنج بار</li>
+            <li>ب. فاکتور با رسید ساز برنج بار</li>
+            <li>ج. کیفیت سنج برنج یار</li>
+        </ul>
+
+        <h3>۲. بازارچه خدمات</h3>
+        <ul class="service-list">
+            <li>الف. ترابری</li>
+            <li>ب. سم و کود و نهاده‌ها</li>
+        </ul>
+    </div>    <!-- دکمه‌های اصلی -->
+    <div class="buttons-container">
+        <a href="#" target="_blank" class="btn-card btn-orange">
+            <div class="btn-content">
+                <div class="btn-icon">📱</div>
+                <div class="btn-texts">
+                    <span class="btn-main-text">دانلود اپلیکیشن شالیکار</span>
+                    <span class="btn-sub-text">نسخه اندروید - فایل نصبی APK</span>
+                </div>
+            </div>
+            <div class="arrow-icon">◀</div>
+        </a>
+
+        <a href="scarecrow.html" class="btn-card btn-green">
+            <div class="btn-content">
+                <div class="btn-icon">🎮</div>
+                <div class="btn-texts">
+                    <span class="btn-main-text">ورود به شبیه‌ساز مزرعه</span>
+                    <span class="btn-sub-text">نسخه وب - بدون نیاز به نصب</span>
+                </div>
+            </div>
+            <div class="arrow-icon">◀</div>
+        </a>
+
+        <a href="https://t.me/berenjyar_bot" target="_blank" class="btn-card btn-blue">
+            <div class="btn-content">
+                <div class="btn-icon">🤖</div>
+                <div class="btn-texts">
+                    <span class="btn-main-text">ربات و کانال تلگرام</span>
+                    <span class="btn-sub-text">@berenjyar_bot</span>
+                </div>
+            </div>
+            <div class="arrow-icon">◀</div>
+        </a>
+    </div>
+
+    <!-- فوتر -->
+    <div class="footer">
+        © سامانه هوشمند برنج یار - مازندران
+    </div>
+
+</body>
+</html>
